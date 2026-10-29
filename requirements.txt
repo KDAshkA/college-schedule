@@ -1,0 +1,6 @@
+playwright
+icalendar
+python-dotenv
+beautifulsoup4
+tzdata
+python-docx
