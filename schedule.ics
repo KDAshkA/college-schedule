@@ -1,0 +1,227 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Petrocollege//RU
+X-WR-CALNAME:Расписание 56-11
+X-WR-TIMEZONE:Europe/Moscow
+BEGIN:VEVENT
+SUMMARY:Русский язык
+DTSTART;TZID=Europe/Moscow:20261027T090000
+DTEND;TZID=Europe/Moscow:20261027T103000
+UID:2026-10-27-p1-all@petrocollege.ru
+DESCRIPTION:Пара №: 1\nПреподаватель: Титова Ир
+ ина Евгеньевна\nКабинет: 1/201
+LOCATION:Каб. 1/201
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Математика
+DTSTART;TZID=Europe/Moscow:20261027T105000
+DTEND;TZID=Europe/Moscow:20261027T122000
+UID:2026-10-27-p2-all@petrocollege.ru
+DESCRIPTION:Пара №: 2\nПреподаватель: Паллонен 
+ Ирина Анатольевна\nКабинет: 1/221
+LOCATION:Каб. 1/221
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Химия
+DTSTART;TZID=Europe/Moscow:20261027T130500
+DTEND;TZID=Europe/Moscow:20261027T143500
+UID:2026-10-27-p3-all@petrocollege.ru
+DESCRIPTION:Пара №: 3\nПреподаватель: Худова Ан
+ на Вадимовна\nКабинет: 4/307
+LOCATION:Каб. 4/307
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Обществознание
+DTSTART;TZID=Europe/Moscow:20261027T145000
+DTEND;TZID=Europe/Moscow:20261027T162000
+UID:2026-10-27-p4-all@petrocollege.ru
+DESCRIPTION:Пара №: 4\nПреподаватель: Якушкин М
+ аксим Васильевич\nКабинет: 1/307
+LOCATION:Каб. 1/307
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚡ [ЗАМЕНА] 1 / 56-11   РАЗ.О ВАЖ.45МИН Палл
+ онен И.А.\, 1/221
+DTSTART;TZID=Europe/Moscow:20261028T090000
+DTEND;TZID=Europe/Moscow:20261028T103000
+UID:2026-10-28-p1-all@petrocollege.ru
+DESCRIPTION:Пара №: 1\nПреподаватель: Паллонен 
+ Ирина Анатольевна\nКабинет: 1/221
+LOCATION:Каб. 1/221
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Математика
+DTSTART;TZID=Europe/Moscow:20261028T105000
+DTEND;TZID=Europe/Moscow:20261028T122000
+UID:2026-10-28-p2-all@petrocollege.ru
+DESCRIPTION:Пара №: 2\nПреподаватель: Паллонен 
+ Ирина Анатольевна\nКабинет: 1/221
+LOCATION:Каб. 1/221
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:ДОП Современные траектории професс
+ иональной карьеры
+DTSTART;TZID=Europe/Moscow:20261028T130500
+DTEND;TZID=Europe/Moscow:20261028T143500
+UID:2026-10-28-p3-all@petrocollege.ru
+DESCRIPTION:Пара №: 3\nПреподаватель: Зорина Ел
+ ена Сергеевна\nКабинет: 2/310
+LOCATION:Каб. 2/310
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Математика
+DTSTART;TZID=Europe/Moscow:20261028T181500
+DTEND;TZID=Europe/Moscow:20261028T194500
+UID:2026-10-28-p6-all@petrocollege.ru
+DESCRIPTION:Пара №: 6\nПреподаватель: Паллонен 
+ Ирина Анатольевна\nКабинет: СДО.139
+LOCATION:Каб. СДО.139
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Основы безопасности и защиты Родины
+DTSTART;TZID=Europe/Moscow:20261029T090000
+DTEND;TZID=Europe/Moscow:20261029T103000
+UID:2026-10-29-p1-all@petrocollege.ru
+DESCRIPTION:Пара №: 1\nПреподаватель: Смирнова 
+ Диана Яковлевна\nКабинет: 1/206
+LOCATION:Каб. 1/206
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Физическая культура (Подгруппа: 1)
+DTSTART;TZID=Europe/Moscow:20261029T105000
+DTEND;TZID=Europe/Moscow:20261029T122000
+UID:2026-10-29-p2-Подгруппа: 1@petrocollege.ru
+DESCRIPTION:Пара №: 2\nПреподаватель: Соболева 
+ Галина Михайловна\nКабинет: 1/С.зал №1
+LOCATION:Каб. 1/С.зал №1
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Физическая культура (Подгруппа: 2)
+DTSTART;TZID=Europe/Moscow:20261029T105000
+DTEND;TZID=Europe/Moscow:20261029T122000
+UID:2026-10-29-p2-Подгруппа: 2@petrocollege.ru
+DESCRIPTION:Пара №: 2\nПреподаватель: Карнаухо
+ ва Анастасия Владимировна\nКабинет: 1/С.з
+ ал №1
+LOCATION:Каб. 1/С.зал №1
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Физика
+DTSTART;TZID=Europe/Moscow:20261029T130500
+DTEND;TZID=Europe/Moscow:20261029T143500
+UID:2026-10-29-p3-all@petrocollege.ru
+DESCRIPTION:Пара №: 3\nПреподаватель: Романова 
+ Галина Алексеевна\nКабинет: 4/306
+LOCATION:Каб. 4/306
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚡ [ЗАМЕНА] 4 / 56-11    []ДОП Совр.траект З
+ орина Е.С.\, 1/228
+DTSTART;TZID=Europe/Moscow:20261029T145000
+DTEND;TZID=Europe/Moscow:20261029T162000
+UID:2026-10-29-p4-all@petrocollege.ru
+DESCRIPTION:Пара №: 4\nПреподаватель: Зорина Ел
+ ена Сергеевна\nКабинет: 1/228
+LOCATION:Каб. 1/228
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Литература
+DTSTART;TZID=Europe/Moscow:20261030T090000
+DTEND;TZID=Europe/Moscow:20261030T103000
+UID:2026-10-30-p1-all@petrocollege.ru
+DESCRIPTION:Пара №: 1\nПреподаватель: Титова Ир
+ ина Евгеньевна\nКабинет: 1/201
+LOCATION:Каб. 1/201
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:История
+DTSTART;TZID=Europe/Moscow:20261030T105000
+DTEND;TZID=Europe/Moscow:20261030T122000
+UID:2026-10-30-p2-all@petrocollege.ru
+DESCRIPTION:Пара №: 2\nПреподаватель: Максимов 
+ Всеволод Дмитриевич\nКабинет: 2/102
+LOCATION:Каб. 2/102
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Русский язык
+DTSTART;TZID=Europe/Moscow:20261030T130500
+DTEND;TZID=Europe/Moscow:20261030T143500
+UID:2026-10-30-p3-all@petrocollege.ru
+DESCRIPTION:Пара №: 3\nПреподаватель: Титова Ир
+ ина Евгеньевна\nКабинет: 1/201
+LOCATION:Каб. 1/201
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚡ [ЗАМЕНА] 6 / 56-11   Физика Романова Г.А
+ .\, СДО
+DTSTART;TZID=Europe/Moscow:20261030T181500
+DTEND;TZID=Europe/Moscow:20261030T194500
+UID:2026-10-30-p6-all@petrocollege.ru
+DESCRIPTION:Пара №: 6\nПреподаватель: Романова 
+ Галина Алексеевна\nКабинет: СДО.100
+LOCATION:Каб. СДО.100
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Информатика (Подгруппа: 1)
+DTSTART;TZID=Europe/Moscow:20261031T090000
+DTEND;TZID=Europe/Moscow:20261031T103000
+UID:2026-10-31-p1-Подгруппа: 1@petrocollege.ru
+DESCRIPTION:Пара №: 1\nПреподаватель: Антонов С
+ ергей Ливерьевич\nКабинет: 1/335
+LOCATION:Каб. 1/335
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Информатика (Подгруппа: 2)
+DTSTART;TZID=Europe/Moscow:20261031T090000
+DTEND;TZID=Europe/Moscow:20261031T103000
+UID:2026-10-31-p1-Подгруппа: 2@petrocollege.ru
+DESCRIPTION:Пара №: 1\nПреподаватель: Вакансия 
+ Романова 4\nКабинет: 1/335*
+LOCATION:Каб. 1/335*
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Математика
+DTSTART;TZID=Europe/Moscow:20261031T104500
+DTEND;TZID=Europe/Moscow:20261031T121500
+UID:2026-10-31-p2-all@petrocollege.ru
+DESCRIPTION:Пара №: 2\nПреподаватель: Паллонен 
+ Ирина Анатольевна\nКабинет: 1/221
+LOCATION:Каб. 1/221
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Биология
+DTSTART;TZID=Europe/Moscow:20261031T124500
+DTEND;TZID=Europe/Moscow:20261031T141500
+UID:2026-10-31-p3-all@petrocollege.ru
+DESCRIPTION:Пара №: 3\nПреподаватель: Соплина О
+ льга Николаевна\nКабинет: 1/205
+LOCATION:Каб. 1/205
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Иностранный язык (Подгруппа: 1)
+DTSTART;TZID=Europe/Moscow:20261031T143000
+DTEND;TZID=Europe/Moscow:20261031T160000
+UID:2026-10-31-p4-Подгруппа: 1@petrocollege.ru
+DESCRIPTION:Пара №: 4\nПреподаватель: Журавлев
+ а Ирина Львовна\nКабинет: 4/110
+LOCATION:Каб. 4/110
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Иностранный язык (Подгруппа: 2)
+DTSTART;TZID=Europe/Moscow:20261031T143000
+DTEND;TZID=Europe/Moscow:20261031T160000
+UID:2026-10-31-p4-Подгруппа: 2@petrocollege.ru
+DESCRIPTION:Пара №: 4\nПреподаватель: Анисимов
+ а Дарья Александровна\nКабинет: 4/108
+LOCATION:Каб. 4/108
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Основы безопасности и защиты Родины
+DTSTART;TZID=Europe/Moscow:20261031T180000
+DTEND;TZID=Europe/Moscow:20261031T193000
+UID:2026-10-31-p6-all@petrocollege.ru
+DESCRIPTION:Пара №: 6\nПреподаватель: Смирнова 
+ Диана Яковлевна\nКабинет: СДО.28
+LOCATION:Каб. СДО.28
+END:VEVENT
+END:VCALENDAR
