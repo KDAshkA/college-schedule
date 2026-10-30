@@ -1,0 +1,41 @@
+name: Auto Update Schedule
+
+on:
+  schedule:
+    - cron: '0 */3 * * *' # Запускать автоматически каждые 3 часа
+  workflow_dispatch:      # Кнопка для ручного запуска
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install libraries and browser
+        run: |
+          pip install -r requirements.txt
+          playwright install --with-deps chromium
+
+      - name: Run schedule script
+        env:
+          PORTAL_LOGIN: ${{ secrets.PORTAL_LOGIN }}
+          PORTAL_PASSWORD: ${{ secrets.PORTAL_PASSWORD }}
+          TARGET_GROUP: "56-11"
+        run: python main.py
+
+      - name: Save updated schedule.ics
+        run: |
+          git config user.name "Schedule Bot"
+          git config user.email "bot@github.com"
+          git add schedule.ics
+          git diff --staged --quiet || git commit -m "Auto-update schedule"
+          git push
