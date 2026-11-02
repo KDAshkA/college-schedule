@@ -240,4 +240,16 @@ with sync_playwright() as p:
         except Exception:
             pass
 
+        if TG_TOKEN and TG_CHAT_ID:
+    print(" -> Отправляем файл schedule.ics в Telegram...")
+    with open(out_path, "rb") as f:
+        resp = requests.post(
+            f"https://api.telegram.org/bot{TG_TOKEN}/sendDocument",
+            data={"chat_id": TG_CHAT_ID, "caption": f"✅ Расписание {TARGET_GROUP} обновлено! (Пар: {len(events)})"},
+            files={"document": f},
+            timeout=20
+        )
+    print(f" -> Ответ Telegram ({resp.status_code}): {resp.text}")
+else:
+    print(" -> [!] ПРОПУСК TELEGRAM: Переменные TG_TOKEN или TG_CHAT_ID пустые!")
         print(f"=== ФИНИШ! Собрано пар: {len(events)}. Файл обновлен: {out_path} ===")
