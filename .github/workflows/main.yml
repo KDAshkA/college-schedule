@@ -2,8 +2,8 @@ name: Auto Update Schedule
 
 on:
   schedule:
-    - cron: '0 */3 * * *' # Запускать автоматически каждые 3 часа
-  workflow_dispatch:      # Кнопка для ручного запуска
+    - cron: '0 */4 * * *' # Автозапуск каждые 4 часа
+  workflow_dispatch:      # Позволяет запускать кнопкой с телефона
 
 permissions:
   contents: write
@@ -20,19 +20,20 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install libraries and browser
+      - name: Install libraries
         run: |
           pip install -r requirements.txt
           playwright install --with-deps chromium
 
-      - name: Run schedule script
+      - name: Run scraper
         env:
           PORTAL_LOGIN: ${{ secrets.PORTAL_LOGIN }}
           PORTAL_PASSWORD: ${{ secrets.PORTAL_PASSWORD }}
-          TARGET_GROUP: "56-11"
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
         run: python main.py
 
-      - name: Save updated schedule.ics
+      - name: Update schedule.ics in repo
         run: |
           git config user.name "Schedule Bot"
           git config user.email "bot@github.com"
