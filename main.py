@@ -3,7 +3,7 @@ print("=== СТАРТ ПРОГРАММЫ ===")
 import io
 import os
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 try:
@@ -23,8 +23,11 @@ load_dotenv()
 LOGIN = os.getenv("PORTAL_LOGIN") or "10260472"
 PASSWORD = os.getenv("PORTAL_PASSWORD") or "aS79XBqrVU"
 TARGET_GROUP = "56-11"
-# Точный ID группы 56-11 из HTML-кода сайта (на случай резервного выбора)
 TARGET_GROUP_UUID = "b19cd1cf-f504-11f0-80c0-bc0d9b767ccf"
+
+# Данные для отправки файла в Telegram (берутся из .env или секретов GitHub)
+TG_TOKEN = os.getenv("TG_TOKEN") or ""
+TG_CHAT_ID = os.getenv("TG_CHAT_ID") or ""
 
 BASE_URL = "https://portal.petrocollege.ru"
 URL = f"{BASE_URL}/schedule/schedule-and-substitutions/"
@@ -44,16 +47,19 @@ MONTHS = {
 }
 
 print("[2/5] Открываем браузер...")
+unique_events = {}
+
 with sync_playwright() as p:
-    # headless=True показывает окно браузера, чтобы вы видели выбор группы
-    browser = p.chromium.launch(headless=True)
+    # На сервере GitHub работает в фоновом режиме (headless=True)
+    # Если хотите видеть окно на своем ПК, временно поменяйте True на False
+    is_headless = os.getenv("GITHUB_ACTIONS") == "true" or True
+    browser = p.chromium.launch(headless=is_headless)
     context = browser.new_context(viewport={"width": 1280, "height": 900})
     page = context.new_page()
 
     print(f"[3/5] Загружаем сайт {URL} ...")
     page.goto(URL, wait_until="domcontentloaded", timeout=60000)
 
-    # Авторизация, если появилась форма входа
     if page.locator("input[type='password']").count() > 0:
         print(" -> Вводим логин и пароль...")
         page.locator("input[name='USER_LOGIN'], input[name='login'], input[type='text']:not(.filter)").first.fill(LOGIN)
@@ -68,41 +74,47 @@ with sync_playwright() as p:
     print(" -> Ждем появления блока фильтров...")
     page.wait_for_selector(".filter-group", timeout=30000)
 
-    # 1. Выбираем фильтр "По группам" (value="groups")
-    print(" -> Выбираем режим 'По группам'...")
-    filter_type = page.locator("select[name='filterType']")
-    filter_type.select_option("groups")
-    filter_type.dispatch_event("change")
+    today = datetime.now(TIMEZONE)
 
-    # Ждем, пока в списке #third-option подгрузятся группы (в частности, группа 56-11)
-    print(f" -> Ожидаем подгрузки списка групп и выбираем {TARGET_GROUP}...")
-    page.wait_for_function(
-        f"""() => {{
-            const s = document.querySelector('#third-option');
-            return s && Array.from(s.options).some(o => o.text.trim() === '{TARGET_GROUP}');
-        }}""",
-        timeout=15000
-    )
+    # Цикл собирает расписание на 2 недели: 0 (текущая) и +7 дней (следующая)
+    for shift in [0, 7]:
+        target_dt = today + timedelta(days=shift)
+        date_str = target_dt.strftime("%Y-%m-%d")
+        print(f" -> Загружаем неделю для даты: {date_str}...")
 
-    # 2. Выбираем группу 56-11 визуальным кликом через Select2 (как реальный пользователь)
-    select2_box = page.locator(".filter-group .select2-selection--single")
-    if select2_box.count() > 0:
-        select2_box.first.click()
-        page.wait_for_timeout(300)
+        # Устанавливаем дату
+        date_input = page.locator("input.filter-date")
+        date_input.fill(date_str)
+        date_input.dispatch_event("change")
 
-        # Если есть поле поиска внутри выпадающего списка Select2 — печатаем туда "56-11"
-        search_field = page.locator(".select2-container--open input.select2-search__field")
-        if search_field.count() > 0 and search_field.first.is_visible():
-            search_field.first.fill(TARGET_GROUP)
+        # Выбираем фильтр "По группам"
+        filter_type = page.locator("select[name='filterType']")
+        filter_type.select_option("groups")
+        filter_type.dispatch_event("change")
+
+        # Ждем подгрузки списка групп
+        page.wait_for_function(
+            f"""() => {{
+                const s = document.querySelector('#third-option');
+                return s && Array.from(s.options).some(o => o.text.trim() === '{TARGET_GROUP}');
+            }}""",
+            timeout=15000
+        )
+        # Выбираем группу 56-11 визуальным кликом и через JS
+        select2_box = page.locator(".filter-group .select2-selection--single")
+        if select2_box.count() > 0:
+            select2_box.first.click()
             page.wait_for_timeout(300)
-            search_field.first.press("Enter")
-        else:
-            # Иначе кликаем прямо по пункту "56-11" в открывшемся списке
-            option_item = page.locator(".select2-results__option", has_text=TARGET_GROUP)
-            if option_item.count() > 0:
-                option_item.first.click()
+            search_field = page.locator(".select2-container--open input.select2-search__field")
+            if search_field.count() > 0 and search_field.first.is_visible():
+                search_field.first.fill(TARGET_GROUP)
+                page.wait_for_timeout(300)
+                search_field.first.press("Enter")
+            else:
+                option_item = page.locator(".select2-results__option", has_text=TARGET_GROUP)
+                if option_item.count() > 0:
+                    option_item.first.click()
 
-            # Страхуем выбор через JS (устанавливаем точный UUID группы 56-11 и вызываем событиеSelect2)
         page.evaluate(
             """({groupName, groupUuid}) => {
                 const s = document.querySelector('#third-option');
@@ -116,131 +128,133 @@ with sync_playwright() as p:
             }""",
             {"groupName": TARGET_GROUP, "groupUuid": TARGET_GROUP_UUID}
         )
-
         page.wait_for_timeout(500)
 
-        # 3. Нажимаем кнопку "Показать"
-        print(" -> Нажимаем кнопку 'Показать' и ждем обновления таблицы...")
+        # Нажимаем кнопку "Показать"
         show_btn = page.locator("div.button.print-button", has_text="Показать")
         if show_btn.count() > 0:
             show_btn.first.click()
         else:
             page.locator(".print-button").first.click()
 
-        # Ждем завершения загрузки расписания
         page.wait_for_load_state("networkidle", timeout=20000)
         page.wait_for_timeout(2000)
 
+        # Парсим расписание текущей открытой недели
         html = page.content()
-        cookies = {c["name"]: c["value"] for c in context.cookies()}
-        browser.close()
+        soup = BeautifulSoup(html, "html.parser")
+        byear, bmonth = target_dt.year, target_dt.month
 
-    print("[4/5] Читаем расписание группы 56-11 и проверяем файлы замен (.docx)...")
-    soup = BeautifulSoup(html, "html.parser")
-    events = []
-
-    date_in = soup.select_one("input.filter-date")
-    if date_in and date_in.get("value"):
-        byear, bmonth = map(int, date_in["value"].split("-")[:2])
-    else:
-        byear, bmonth = datetime.now().year, datetime.now().month
-
-    for col in soup.select("#schedule-list .rasp-calendar-col"):
-        d_el = col.select_one(".rasp-calendar__date")
-        if not d_el:
-            continue
-        m_date = re.match(r"(\d{1,2})\s+([а-яА-ЯёЁ]+)", d_el.get_text(strip=True))
-        if not m_date:
-            continue
-        day, month = int(m_date.group(1)), MONTHS.get(m_date.group(2).lower(), bmonth)
-        year = byear + 1 if (bmonth == 12 and month == 1) else (byear - 1 if (bmonth == 1 and month == 12) else byear)
-        d_key = f"{year:04d}-{month:02d}-{day:02d}"
-
-        for row in col.select(".rasp-calendar__row"):
-            disc_el = row.select_one(".rasp-calendar__discipline")
-            if not disc_el:
+        for col in soup.select("#schedule-list .rasp-calendar-col"):
+            d_el = col.select_one(".rasp-calendar__date")
+            if not d_el:
                 continue
-            raw = disc_el.get_text(strip=True)
-            m_disc = re.match(r"^(\d+)\.\s*(.+)$", raw)
-            p_num, subj = (int(m_disc.group(1)), m_disc.group(2).strip()) if m_disc else (1, raw)
+            m_date = re.match(r"(\d{1,2})\s+([а-яА-ЯёЁ]+)", d_el.get_text(strip=True))
+            if not m_date:
+                continue
+            day, month = int(m_date.group(1)), MONTHS.get(m_date.group(2).lower(), bmonth)
+            year = byear + 1 if (bmonth == 12 and month == 1) else (
+                byear - 1 if (bmonth == 1 and month == 12) else byear)
+            d_key = f"{year:04d}-{month:02d}-{day:02d}"
 
-            teacher, room = "Не указан", "Не указана"
-            for el in row.select(".rasp-calendar__teacher-name"):
-                t = el.get_text(strip=True)
-                if t.lower().startswith("кабинет:"):
-                    room = t.replace("Кабинет:", "").strip(" ,.")
-                else:
-                    teacher = t
-            sub_el = row.select_one(".rasp-calendar__address")
-            events.append({
-                "date_key": d_key, "y": year, "m": month, "d": day, "num": p_num,
-                "subj": subj, "teacher": teacher, "room": room,
-                "sub": sub_el.get_text(strip=True) if sub_el else None, "is_sub": False
-            })
+            for row in col.select(".rasp-calendar__row"):
+                disc_el = row.select_one(".rasp-calendar__discipline")
+                if not disc_el:
+                    continue
+                raw = disc_el.get_text(strip=True)
+                m_disc = re.match(r"^(\d+)\.\s*(.+)$", raw)
+                p_num, subj = (int(m_disc.group(1)), m_disc.group(2).strip()) if m_disc else (1, raw)
 
-    # Проверка таблицы замен (.docx)
-    for link in soup.select("#bx_886362991_add tbody tr a.table__icon-file")[:3]:
-        d_txt, href = link.get_text(strip=True), link.get("href")
-        if not href or not re.match(r"\d{2}\.\d{2}\.\d{4}", d_txt):
-            continue
-        d, m, y = map(int, d_txt.split("."))
-        d_key = f"{y:04d}-{m:02d}-{d:02d}"
-        try:
-            r = requests.get(f"{BASE_URL}{href}", cookies=cookies, timeout=15)
-            if r.ok:
-                doc = docx.Document(io.BytesIO(r.content))
-                for tbl in doc.tables:
-                    for row in tbl.rows:
-                        cells = [c.text.strip() for c in row.cells]
-                        if TARGET_GROUP in " | ".join(cells):
-                            p_num = next((int(re.search(r"\b([1-6])\b", c).group(1)) for c in cells[1:3] if
-                                          re.search(r"\b([1-6])\b", c)), None)
-                            info = " / ".join(dict.fromkeys([c for c in cells if c and c != TARGET_GROUP]))
-                            print(f" -> Найдена замена в файле {d_txt}: пара {p_num} -> {info}")
-                            matched = [e for e in events if e["date_key"] == d_key and e["num"] == p_num]
-                            for e in matched:
-                                e["subj"], e["is_sub"] = info, True
-        except Exception as e:
-            print(f" -> Не удалось прочитать файл замен {d_txt}: {e}")
+                teacher, room = "Не указан", "Не указана"
+                for el in row.select(".rasp-calendar__teacher-name"):
+                    t = el.get_text(strip=True)
+                    if t.lower().startswith("кабинет:"):
+                        room = t.replace("Кабинет:", "").strip(" ,.")
+                    else:
+                        teacher = t
+                sub_el = row.select_one(".rasp-calendar__address")
+                sub_val = sub_el.get_text(strip=True) if sub_el else None
 
-        print("[5/5] Сохраняем файл schedule.ics ...")
-        cal = Calendar()
-        cal.add("prodid", "-//Petrocollege//RU")
-        cal.add("version", "2.0")
-        cal.add("x-wr-calname", f"Расписание {TARGET_GROUP}")
-        cal.add("x-wr-timezone", "Europe/Moscow")
+                unique_events[(d_key, p_num, sub_val)] = {
+                    "date_key": d_key, "y": year, "m": month, "d": day, "num": p_num,
+                    "subj": subj, "teacher": teacher, "room": room,
+                    "sub": sub_val, "is_sub": False
+                }
 
-        for e in events:
-            dt = datetime(e["y"], e["m"], e["d"])
-            s_map = BELL_SATURDAY if dt.weekday() == 5 else BELL_WEEKDAY
-            st, en = s_map.get(e["num"], ("18:15", "19:45"))
-            if "45 МИНУТ" in e["subj"].upper() and e["num"] == 1:
-                en = "09:45"
-            sh, sm = map(int, st.split(":"))
-            eh, em = map(int, en.split(":"))
+    cookies = {c["name"]: c["value"] for c in context.cookies()}
+    browser.close()
 
-            ev = Event()
-            pref = "⚡ [ЗАМЕНА] " if e["is_sub"] else ""
-            ev.add("summary", f"{pref}{e['subj']}" + (f" ({e['sub']})" if e["sub"] else ""))
-            ev.add("dtstart", datetime(e["y"], e["m"], e["d"], sh, sm, tzinfo=TIMEZONE))
-            ev.add("dtend", datetime(e["y"], e["m"], e["d"], eh, em, tzinfo=TIMEZONE))
-            ev.add("location", f"Каб. {e['room']}")
-            ev.add("description", f"Пара №: {e['num']}\nПреподаватель: {e['teacher']}\nКабинет: {e['room']}")
-            ev.add("uid", f"{e['date_key']}-p{e['num']}-{e['sub'] or 'all'}@petrocollege.ru")
-            cal.add_component(ev)
+events = list(unique_events.values())
+print("[4/5] Проверяем файлы замен (.docx)...")
+for link in soup.select("#bx_886362991_add tbody tr a.table__icon-file")[:5]:
+    d_txt, href = link.get_text(strip=True), link.get("href")
+    if not href or not re.match(r"\d{2}\.\d{2}\.\d{4}", d_txt):
+        continue
+    d, m, y = map(int, d_txt.split("."))
+    d_key = f"{y:04d}-{m:02d}-{d:02d}"
+    try:
+        r = requests.get(f"{BASE_URL}{href}", cookies=cookies, timeout=15)
+        if r.ok:
+            doc = docx.Document(io.BytesIO(r.content))
+            for tbl in doc.tables:
+                for row in tbl.rows:
+                    cells = [c.text.strip() for c in row.cells]
+                    if TARGET_GROUP in " | ".join(cells):
+                        p_num = next((int(re.search(r"\b([1-6])\b", c).group(1)) for c in cells[1:3] if re.search(r"\b([1-6])\b", c)), None)
+                        info = " / ".join(dict.fromkeys([c for c in cells if c and c != TARGET_GROUP]))
+                        print(f" -> Найдена замена в файле {d_txt}: пара {p_num} -> {info}")
+                        matched = [e for e in events if e["date_key"] == d_key and e["num"] == p_num]
+                        for e in matched:
+                            e["subj"], e["is_sub"] = info, True
+    except Exception as e:
+        print(f" -> Не удалось прочитать файл замен {d_txt}: {e}")
 
-        out_path = os.path.abspath("schedule.ics")
-        with open(out_path, "wb") as f:
-            f.write(cal.to_ical())
+print("[5/5] Сохраняем файл schedule.ics ...")
+cal = Calendar()
+cal.add("prodid", "-//Petrocollege//RU")
+cal.add("version", "2.0")
+cal.add("x-wr-calname", f"Расписание {TARGET_GROUP}")
+cal.add("x-wr-timezone", "Europe/Moscow")
 
-        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop", "schedule.ics")
-        try:
-            with open(desktop_path, "wb") as f:
-                f.write(cal.to_ical())
-        except Exception:
-            pass
+for e in events:
+    dt = datetime(e["y"], e["m"], e["d"])
+    s_map = BELL_SATURDAY if dt.weekday() == 5 else BELL_WEEKDAY
+    st, en = s_map.get(e["num"], ("18:15", "19:45"))
+    if "45 МИНУТ" in e["subj"].upper() and e["num"] == 1:
+        en = "09:45"
+    sh, sm = map(int, st.split(":"))
+    eh, em = map(int, en.split(":"))
 
-     if TG_TOKEN and TG_CHAT_ID:
+    ev = Event()
+    pref = "⚡ [ЗАМЕНА] " if e["is_sub"] else ""
+    ev.add("summary", f"{pref}{e['subj']}" + (f" ({e['sub']})" if e["sub"] else ""))
+    ev.add("dtstart", datetime(e["y"], e["m"], e["d"], sh, sm, tzinfo=TIMEZONE))
+    ev.add("dtend", datetime(e["y"], e["m"], e["d"], eh, em, tzinfo=TIMEZONE))
+    ev.add("location", f"Каб. {e['room']}")
+    ev.add("description", f"Пара №: {e['num']}\nПреподаватель: {e['teacher']}\nКабинет: {e['room']}")
+    ev.add("uid", f"{e['date_key']}-p{e['num']}-{e['sub'] or 'all'}@petrocollege.ru")
+    cal.add_component(ev)
+
+out_path = os.path.abspath("schedule.ics")
+with open(out_path, "wb") as f:
+    f.write(cal.to_ical())
+
+# Если задан Telegram-бот, сразу отправляем файл в личные сообщения
+    if TG_TOKEN and TG_CHAT_ID:
+    print(" -> Отправляем файл schedule.ics в Telegram...")
+    try:
+        with open(out_path, "rb") as f:
+            requests.post(
+                f"https://api.telegram.org/bot{TG_TOKEN}/sendDocument",
+                data={"chat_id": TG_CHAT_ID, "caption": f"✅ Расписание {TARGET_GROUP} на 2 недели обновлено! (Пар: {len(events)})"},
+                files={"document": f},
+                timeout=20
+            )
+        print(" -> Успешно отправлено в Telegram!")
+    except Exception as e:
+        print(f" -> Ошибка отправки в Telegram: {e}")
+
+if TG_TOKEN and TG_CHAT_ID:
     print(" -> Отправляем файл schedule.ics в Telegram...")
     with open(out_path, "rb") as f:
         resp = requests.post(
@@ -252,4 +266,4 @@ with sync_playwright() as p:
     print(f" -> Ответ Telegram ({resp.status_code}): {resp.text}")
 else:
     print(" -> [!] ПРОПУСК TELEGRAM: Переменные TG_TOKEN или TG_CHAT_ID пустые!")
-        print(f"=== ФИНИШ! Собрано пар: {len(events)}. Файл обновлен: {out_path} ===")
+print(f"=== ФИНИШ! Собрано пар за 2 недели: {len(events)}. Файл: {out_path} ===")
