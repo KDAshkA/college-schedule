@@ -240,7 +240,7 @@ with sync_playwright() as p:
         except Exception:
             pass
 
-        if TG_TOKEN and TG_CHAT_ID:
+     if TG_TOKEN and TG_CHAT_ID:
     print(" -> Отправляем файл schedule.ics в Telegram...")
     with open(out_path, "rb") as f:
         resp = requests.post(
