@@ -86,9 +86,9 @@ SUMMARY:⚡ [ЗАМЕНА] 56-11 (подг) / 3 / 56-11  [2] Физика
 DTSTART;TZID=Europe/Moscow:20261105T130500
 DTEND;TZID=Europe/Moscow:20261105T143500
 UID:2026-11-05-p3-Подгруппа: 2@petrocollege.ru
-DESCRIPTION:Пара №: 3\nПреподаватель: Вакансия 
- Романова 14\nКабинет: СДО.99
-LOCATION:Каб. СДО.99
+DESCRIPTION:Пара №: 3\nПреподаватель: Романова 
+ Галина Алексеевна\nКабинет: 4/306
+LOCATION:Каб. 4/306
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Информатика (Подгруппа: 1)
