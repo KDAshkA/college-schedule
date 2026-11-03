@@ -69,7 +69,9 @@ DESCRIPTION:Пара №: 2\nПреподаватель: Карнаухо
 LOCATION:Каб. 1/С.зал №1_
 END:VEVENT
 BEGIN:VEVENT
-SUMMARY:Физика (Подгруппа: 1)
+SUMMARY:⚡ [ЗАМЕНА] 56-11 (подг) / 3 / 56-11  [2] Физика 
+ Вакансия Р.14\, СДО.99 / 56-11  [2] Физика Романо
+ ва Г.А./Вакансия Р.14\, 4/306 (Подгруппа: 1)
 DTSTART;TZID=Europe/Moscow:20261105T130500
 DTEND;TZID=Europe/Moscow:20261105T143500
 UID:2026-11-05-p3-Подгруппа: 1@petrocollege.ru
@@ -78,7 +80,9 @@ DESCRIPTION:Пара №: 3\nПреподаватель: Романова
 LOCATION:Каб. 4/306
 END:VEVENT
 BEGIN:VEVENT
-SUMMARY:Физика (Подгруппа: 2)
+SUMMARY:⚡ [ЗАМЕНА] 56-11 (подг) / 3 / 56-11  [2] Физика 
+ Вакансия Р.14\, СДО.99 / 56-11  [2] Физика Романо
+ ва Г.А./Вакансия Р.14\, 4/306 (Подгруппа: 2)
 DTSTART;TZID=Europe/Moscow:20261105T130500
 DTEND;TZID=Europe/Moscow:20261105T143500
 UID:2026-11-05-p3-Подгруппа: 2@petrocollege.ru
