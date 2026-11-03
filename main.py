@@ -217,20 +217,4 @@ out_path = os.path.abspath("schedule.ics")
 with open(out_path, "wb") as f:
     f.write(cal.to_ical())
 
-if TG_TOKEN and TG_CHAT_ID:
-    print(" -> Отправляем файл в Telegram...", flush=True)
-    try:
-        with open(out_path, "rb") as f:
-            resp = requests.post(
-                f"https://api.telegram.org/bot{TG_TOKEN}/sendDocument",
-                data={"chat_id": TG_CHAT_ID, "caption": f"📅 Расписание {TARGET_GROUP} на 2 недели (пар: {len(events)})"},
-                files={"document": f},
-                timeout=20
-            )
-        print(f" -> Ответ Telegram ({resp.status_code}): {resp.text}", flush=True)
-    except Exception as err:
-        print(f" -> Ошибка отправки в Telegram: {err}", flush=True)
-else:
-    print(" -> [!] TG_TOKEN или TG_CHAT_ID не заданы в Secrets!", flush=True)
-
 print(f"=== [ШАГ 5] ФИНИШ! Файл сохранен: {out_path} ===", flush=True)
