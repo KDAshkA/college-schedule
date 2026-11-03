@@ -6,17 +6,12 @@ import re
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-try:
-    import docx
-    import requests
-    from bs4 import BeautifulSoup
-    from dotenv import load_dotenv
-    from icalendar import Calendar, Event
-    from playwright.sync_api import sync_playwright
-    print("=== [ШАГ 2] ВСЕ БИБЛИОТЕКИ ПОДКЛЮЧЕНЫ ===", flush=True)
-except Exception as e:
-    print(f"[ОШИБКА БИБЛИОТЕК] Выполните в терминале:\npython -m pip install playwright icalendar python-dotenv beautifulsoup4 tzdata python-docx requests\nДетали: {e}", flush=True)
-    raise SystemExit(1)
+import docx
+import requests
+from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+from icalendar import Calendar, Event
+from playwright.sync_api import sync_playwright
 
 load_dotenv()
 
@@ -48,15 +43,23 @@ MONTHS = {
 unique_events = {}
 is_github = os.getenv("GITHUB_ACTIONS") == "true"
 
-print(f"=== [ШАГ 3] ЗАПУСКАЕМ БРАУЗЕР (скрытый режим: {is_github}) ===", flush=True)
+print(f"=== [ШАГ 2] ЗАПУСКАЕМ БРАУЗЕР (GitHub Actions: {is_github}) ===", flush=True)
 
 with sync_playwright() as p:
-    browser = p.chromium.launch(headless=is_github)
-    context = browser.new_context(viewport={"width": 1280, "height": 900})
+    browser = p.chromium.launch(
+        headless=is_github,
+        args=["--no-sandbox", "--disable-dev-shm-usage", "--disable-blink-features=AutomationControlled"]
+    )
+    context = browser.new_context(
+        viewport={"width": 1280, "height": 900},
+        user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    )
     page = context.new_page()
+    page.set_default_timeout(45000)
 
     print(f" -> Открываем сайт {URL} ...", flush=True)
-    page.goto(URL, wait_until="domcontentloaded", timeout=60000)
+    page.goto(URL, wait_until="commit", timeout=60000)
+    page.wait_for_timeout(3000)
 
     if page.locator("input[type='password']").count() > 0:
         print(" -> Вводим логин и пароль...", flush=True)
@@ -67,52 +70,36 @@ with sync_playwright() as p:
             btn.first.click()
         else:
             page.locator("input[type='password']").first.press("Enter")
-        page.wait_for_load_state("networkidle", timeout=30000)
+        # Вместо зависающего networkidle ждем появления самого фильтра расписания
+        page.wait_for_selector(".filter-group", timeout=45000)
+    else:
+        page.wait_for_selector(".filter-group", timeout=45000)
 
-    print(" -> Ждем появления фильтров на странице...", flush=True)
-    page.wait_for_selector(".filter-group", timeout=30000)
-
+    print(" -> Фильтры успешно загружены!", flush=True)
     today = datetime.now(TIMEZONE)
 
-    # Цикл на 2 недели: 0 (текущая) и 7 (следующая)
     for shift in [0, 7]:
         target_dt = today + timedelta(days=shift)
         date_str = target_dt.strftime("%Y-%m-%d")
-        print(f" -> Загружаем расписание группы {TARGET_GROUP} на неделю ({date_str})...", flush=True)
+        print(f" -> Загружаем неделю ({date_str}) для группы {TARGET_GROUP}...", flush=True)
 
-        # 1. Вводим дату
-        date_input = page.locator("input.filter-date")
-        date_input.fill(date_str)
-        date_input.dispatch_event("change")
-
-        # 2. Выбираем режим "По группам"
-        filter_type = page.locator("select[name='filterType']")
-        filter_type.select_option("groups")
-        filter_type.dispatch_event("change")
-
-        # 3. Ждем подгрузки списка групп
-        page.wait_for_function(
-            f"() => {{ const s = document.querySelector('#third-option'); return s && Array.from(s.options).some(o => o.text.trim() === '{TARGET_GROUP}'); }}",
-            timeout=15000
+        # 1. Выставляем дату через JS (быстро и без зависаний)
+        page.evaluate(
+            """(d) => {
+                const el = document.querySelector('input.filter-date');
+                if (el) { el.value = d; el.dispatchEvent(new Event('change', {bubbles: true})); }
+            }""",
+            date_str
         )
 
-        # 4. Выбираем группу 56-11
-        select2_box = page.locator(".filter-group .select2-selection--single")
-        if select2_box.count() > 0:
-            select2_box.first.click()
-            page.wait_for_timeout(300)
-            search_field = page.locator(".select2-container--open input.select2-search__field")
-            if search_field.count() > 0 and search_field.first.is_visible():
-                search_field.first.fill(TARGET_GROUP)
-                page.wait_for_timeout(300)
-                search_field.first.press("Enter")
-            else:
-                option_item = page.locator(".select2-results__option", has_text=TARGET_GROUP)
-                if option_item.count() > 0:
-                    option_item.first.click()
+        # 2. Выбираем "По группам"
+        page.locator("select[name='filterType']").select_option("groups")
+        page.locator("select[name='filterType']").dispatch_event("change")
+        page.wait_for_timeout(2000)
 
+        # 3. Устанавливаем группу 56-11 напрямую по её UUID
         page.evaluate(
-            """({groupName, groupUuid}) => {
+        """({groupName, groupUuid}) => {
                 const s = document.querySelector('#third-option');
                 if (!s) return;
                 const opt = Array.from(s.options).find(o => o.text.trim() === groupName);
@@ -124,19 +111,13 @@ with sync_playwright() as p:
             }""",
             {"groupName": TARGET_GROUP, "groupUuid": TARGET_GROUP_UUID}
         )
-        page.wait_for_timeout(500)
+        page.wait_for_timeout(1000)
 
-        # 5. Нажимаем "Показать"
-        show_btn = page.locator("div.button.print-button", has_text="Показать")
-        if show_btn.count() > 0:
-            show_btn.first.click()
-        else:
-            page.locator(".print-button").first.click()
+        # 4. Нажимаем "Показать" и ждем 4 секунды обновления карточек
+        page.locator(".print-button").first.click()
+        page.wait_for_timeout(4000)
 
-        page.wait_for_load_state("networkidle", timeout=20000)
-        page.wait_for_timeout(2000)
-
-        # 6. Разбираем HTML загруженной недели
+        # 5. Собираем пары со страницы
         html = page.content()
         soup = BeautifulSoup(html, "html.parser")
         byear, bmonth = target_dt.year, target_dt.month
@@ -180,7 +161,7 @@ with sync_playwright() as p:
     browser.close()
 
 events = list(unique_events.values())
-print(f"=== [ШАГ 4] СОБРАНО ПАР: {len(events)}. ПРОВЕРЯЕМ ЗАМЕНЫ (.DOCX) ===", flush=True)
+print(f"=== [ШАГ 3] СОБРАНО ПАР: {len(events)}. ПРОВЕРЯЕМ ЗАМЕНЫ ===", flush=True)
 
 for link in soup.select("#bx_886362991_add tbody tr a.table__icon-file")[:4]:
     d_txt, href = link.get_text(strip=True), link.get("href")
@@ -188,22 +169,25 @@ for link in soup.select("#bx_886362991_add tbody tr a.table__icon-file")[:4]:
         continue
     d, m, y = map(int, d_txt.split("."))
     d_key = f"{y:04d}-{m:02d}-{d:02d}"
-    r = requests.get(f"{BASE_URL}{href}", cookies=cookies, timeout=15)
-    if r.ok:
-        doc = docx.Document(io.BytesIO(r.content))
-        for tbl in doc.tables:
-            for row in tbl.rows:
-                cells = [c.text.strip() for c in row.cells]
-                if TARGET_GROUP in " | ".join(cells):
-                    p_num = next((int(re.search(r"\b([1-6])\b", c).group(1)) for c in cells[1:3] if re.search(r"\b([1-6])\b", c)), None)
-                    info = " / ".join(dict.fromkeys([c for c in cells if c and c != TARGET_GROUP]))
-                    print(f" -> Найдена замена ({d_txt}): пара {p_num} -> {info}", flush=True)
-                    for e in events:
-                        if e["date_key"] == d_key and e["num"] == p_num:
-                            e["subj"] = info
-                            e["is_sub"] = True
+    try:
+        r = requests.get(f"{BASE_URL}{href}", cookies=cookies, timeout=15)
+        if r.ok:
+            doc = docx.Document(io.BytesIO(r.content))
+            for tbl in doc.tables:
+                for row in tbl.rows:
+                    cells = [c.text.strip() for c in row.cells]
+                    if TARGET_GROUP in " | ".join(cells):
+                        p_num = next((int(re.search(r"\b([1-6])\b", c).group(1)) for c in cells[1:3] if re.search(r"\b([1-6])\b", c)), None)
+                        info = " / ".join(dict.fromkeys([c for c in cells if c and c != TARGET_GROUP]))
+                        print(f" -> Замена ({d_txt}): пара {p_num} -> {info}", flush=True)
+                        for e in events:
+                            if e["date_key"] == d_key and e["num"] == p_num:
+                                e["subj"] = info
+                                e["is_sub"] = True
+    except Exception as err:
+        print(f" -> Ошибка чтения файла замен {d_txt}: {err}", flush=True)
 
-print("=== [ШАГ 5] СОХРАНЯЕМ КАЛЕНДАРЬ И ОТПРАВЛЯЕМ В TELEGRAM ===", flush=True)
+print("=== [ШАГ 4] СОХРАНЯЕМ КАЛЕНДАРЬ И ОТПРАВЛЯЕМ В TELEGRAM ===", flush=True)
 cal = Calendar()
 cal.add("prodid", "-//Petrocollege//RU")
 cal.add("version", "2.0")
@@ -235,13 +219,18 @@ with open(out_path, "wb") as f:
 
 if TG_TOKEN and TG_CHAT_ID:
     print(" -> Отправляем файл в Telegram...", flush=True)
-    with open(out_path, "rb") as f:
-        resp = requests.post(
-            f"https://api.telegram.org/bot{TG_TOKEN}/sendDocument",
-            data={"chat_id": TG_CHAT_ID, "caption": f"📅 Расписание {TARGET_GROUP} на 2 недели (пар: {len(events)})"},
-            files={"document": f},
-            timeout=20
-        )
-    print(f" -> Статус Telegram: {resp.status_code}", flush=True)
+    try:
+        with open(out_path, "rb") as f:
+            resp = requests.post(
+                f"https://api.telegram.org/bot{TG_TOKEN}/sendDocument",
+                data={"chat_id": TG_CHAT_ID, "caption": f"📅 Расписание {TARGET_GROUP} на 2 недели (пар: {len(events)})"},
+                files={"document": f},
+                timeout=20
+            )
+        print(f" -> Ответ Telegram ({resp.status_code}): {resp.text}", flush=True)
+    except Exception as err:
+        print(f" -> Ошибка отправки в Telegram: {err}", flush=True)
+else:
+    print(" -> [!] TG_TOKEN или TG_CHAT_ID не заданы в Secrets!", flush=True)
 
-print(f"=== ФИНИШ! Файл сохранен: {out_path} ===", flush=True)
+print(f"=== [ШАГ 5] ФИНИШ! Файл сохранен: {out_path} ===", flush=True)
