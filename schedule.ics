@@ -3,4 +3,190 @@ VERSION:2.0
 PRODID:-//Petrocollege//RU
 X-WR-CALNAME:Расписание 56-11
 X-WR-TIMEZONE:Europe/Moscow
+BEGIN:VEVENT
+SUMMARY:Обществознание
+DTSTART;TZID=Europe/Moscow:20261102T090000
+DTEND;TZID=Europe/Moscow:20261102T103000
+UID:2026-11-02-p1-all@petrocollege.ru
+DESCRIPTION:Пара №: 1\nПреподаватель: Якушкин М
+ аксим Васильевич\nКабинет: 1/307
+LOCATION:Каб. 1/307
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:ДОП Современные траектории професс
+ иональной карьеры
+DTSTART;TZID=Europe/Moscow:20261102T105000
+DTEND;TZID=Europe/Moscow:20261102T122000
+UID:2026-11-02-p2-all@petrocollege.ru
+DESCRIPTION:Пара №: 2\nПреподаватель: Зорина Ел
+ ена Сергеевна\nКабинет: 1/205
+LOCATION:Каб. 1/205
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Физика
+DTSTART;TZID=Europe/Moscow:20261102T130500
+DTEND;TZID=Europe/Moscow:20261102T143500
+UID:2026-11-02-p3-all@petrocollege.ru
+DESCRIPTION:Пара №: 3\nПреподаватель: Романова 
+ Галина Алексеевна\nКабинет: 4/306
+LOCATION:Каб. 4/306
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Математика
+DTSTART;TZID=Europe/Moscow:20261102T181500
+DTEND;TZID=Europe/Moscow:20261102T194500
+UID:2026-11-02-p6-all@petrocollege.ru
+DESCRIPTION:Пара №: 6\nПреподаватель: Паллонен 
+ Ирина Анатольевна\nКабинет: СДО.139
+LOCATION:Каб. СДО.139
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:История
+DTSTART;TZID=Europe/Moscow:20261105T090000
+DTEND;TZID=Europe/Moscow:20261105T103000
+UID:2026-11-05-p1-all@petrocollege.ru
+DESCRIPTION:Пара №: 1\nПреподаватель: Максимов 
+ Всеволод Дмитриевич\nКабинет: 2/215
+LOCATION:Каб. 2/215
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Физическая культура (Подгруппа: 1)
+DTSTART;TZID=Europe/Moscow:20261105T105000
+DTEND;TZID=Europe/Moscow:20261105T122000
+UID:2026-11-05-p2-Подгруппа: 1@petrocollege.ru
+DESCRIPTION:Пара №: 2\nПреподаватель: Соболева 
+ Галина Михайловна\nКабинет: 1/С.зал №1'
+LOCATION:Каб. 1/С.зал №1'
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Физическая культура (Подгруппа: 2)
+DTSTART;TZID=Europe/Moscow:20261105T105000
+DTEND;TZID=Europe/Moscow:20261105T122000
+UID:2026-11-05-p2-Подгруппа: 2@petrocollege.ru
+DESCRIPTION:Пара №: 2\nПреподаватель: Карнаухо
+ ва Анастасия Владимировна\nКабинет: 1/С.з
+ ал №1_
+LOCATION:Каб. 1/С.зал №1_
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚡ [ЗАМЕНА] 56-11 (подг) / 3 / 56-11  [2] Физика 
+ Вакансия Р.14\, СДО.99 / 56-11  [2] Физика Романо
+ ва Г.А./Вакансия Р.14\, 4/306 (Подгруппа: 1)
+DTSTART;TZID=Europe/Moscow:20261105T130500
+DTEND;TZID=Europe/Moscow:20261105T143500
+UID:2026-11-05-p3-Подгруппа: 1@petrocollege.ru
+DESCRIPTION:Пара №: 3\nПреподаватель: Романова 
+ Галина Алексеевна\nКабинет: 4/306
+LOCATION:Каб. 4/306
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚡ [ЗАМЕНА] 56-11 (подг) / 3 / 56-11  [2] Физика 
+ Вакансия Р.14\, СДО.99 / 56-11  [2] Физика Романо
+ ва Г.А./Вакансия Р.14\, 4/306 (Подгруппа: 2)
+DTSTART;TZID=Europe/Moscow:20261105T130500
+DTEND;TZID=Europe/Moscow:20261105T143500
+UID:2026-11-05-p3-Подгруппа: 2@petrocollege.ru
+DESCRIPTION:Пара №: 3\nПреподаватель: Романова 
+ Галина Алексеевна\nКабинет: 4/306
+LOCATION:Каб. 4/306
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Информатика (Подгруппа: 1)
+DTSTART;TZID=Europe/Moscow:20261106T090000
+DTEND;TZID=Europe/Moscow:20261106T103000
+UID:2026-11-06-p1-Подгруппа: 1@petrocollege.ru
+DESCRIPTION:Пара №: 1\nПреподаватель: Антонов С
+ ергей Ливерьевич\nКабинет: 1/335
+LOCATION:Каб. 1/335
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Информатика (Подгруппа: 2)
+DTSTART;TZID=Europe/Moscow:20261106T090000
+DTEND;TZID=Europe/Moscow:20261106T103000
+UID:2026-11-06-p1-Подгруппа: 2@petrocollege.ru
+DESCRIPTION:Пара №: 1\nПреподаватель: Вакансия 
+ Романова 4\nКабинет: 1/335*
+LOCATION:Каб. 1/335*
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:История
+DTSTART;TZID=Europe/Moscow:20261106T105000
+DTEND;TZID=Europe/Moscow:20261106T122000
+UID:2026-11-06-p2-all@petrocollege.ru
+DESCRIPTION:Пара №: 2\nПреподаватель: Максимов 
+ Всеволод Дмитриевич\nКабинет: 1/227
+LOCATION:Каб. 1/227
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Русский язык
+DTSTART;TZID=Europe/Moscow:20261106T130500
+DTEND;TZID=Europe/Moscow:20261106T143500
+UID:2026-11-06-p3-all@petrocollege.ru
+DESCRIPTION:Пара №: 3\nПреподаватель: Титова Ир
+ ина Евгеньевна\nКабинет: 1/201
+LOCATION:Каб. 1/201
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:География
+DTSTART;TZID=Europe/Moscow:20261106T145000
+DTEND;TZID=Europe/Moscow:20261106T162000
+UID:2026-11-06-p4-all@petrocollege.ru
+DESCRIPTION:Пара №: 4\nПреподаватель: Чемисова 
+ Наталья Анатольевна\nКабинет: 1/329
+LOCATION:Каб. 1/329
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Информатика (Подгруппа: 1)
+DTSTART;TZID=Europe/Moscow:20261107T090000
+DTEND;TZID=Europe/Moscow:20261107T103000
+UID:2026-11-07-p1-Подгруппа: 1@petrocollege.ru
+DESCRIPTION:Пара №: 1\nПреподаватель: Антонов С
+ ергей Ливерьевич\nКабинет: 1/335
+LOCATION:Каб. 1/335
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Информатика (Подгруппа: 2)
+DTSTART;TZID=Europe/Moscow:20261107T090000
+DTEND;TZID=Europe/Moscow:20261107T103000
+UID:2026-11-07-p1-Подгруппа: 2@petrocollege.ru
+DESCRIPTION:Пара №: 1\nПреподаватель: Вакансия 
+ Романова 4\nКабинет: 1/335*
+LOCATION:Каб. 1/335*
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Математика
+DTSTART;TZID=Europe/Moscow:20261107T104500
+DTEND;TZID=Europe/Moscow:20261107T121500
+UID:2026-11-07-p2-all@petrocollege.ru
+DESCRIPTION:Пара №: 2\nПреподаватель: Паллонен 
+ Ирина Анатольевна\nКабинет: 1/221
+LOCATION:Каб. 1/221
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Биология
+DTSTART;TZID=Europe/Moscow:20261107T124500
+DTEND;TZID=Europe/Moscow:20261107T141500
+UID:2026-11-07-p3-all@petrocollege.ru
+DESCRIPTION:Пара №: 3\nПреподаватель: Соплина О
+ льга Николаевна\nКабинет: 1/205
+LOCATION:Каб. 1/205
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Иностранный язык (Подгруппа: 1)
+DTSTART;TZID=Europe/Moscow:20261107T143000
+DTEND;TZID=Europe/Moscow:20261107T160000
+UID:2026-11-07-p4-Подгруппа: 1@petrocollege.ru
+DESCRIPTION:Пара №: 4\nПреподаватель: Журавлев
+ а Ирина Львовна\nКабинет: 4/110
+LOCATION:Каб. 4/110
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Иностранный язык (Подгруппа: 2)
+DTSTART;TZID=Europe/Moscow:20261107T143000
+DTEND;TZID=Europe/Moscow:20261107T160000
+UID:2026-11-07-p4-Подгруппа: 2@petrocollege.ru
+DESCRIPTION:Пара №: 4\nПреподаватель: Анисимов
+ а Дарья Александровна\nКабинет: 4/108
+LOCATION:Каб. 4/108
+END:VEVENT
 END:VCALENDAR
