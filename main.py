@@ -96,6 +96,7 @@ with sync_playwright() as p:
             timeout=15000
         )
 
+
         # 4. Выбираем группу 56-11
         select2_box = page.locator(".filter-group .select2-selection--single")
         if select2_box.count() > 0:
@@ -182,6 +183,7 @@ with sync_playwright() as p:
 events = list(unique_events.values())
 print(f"=== [ШАГ 4] СОБРАНО ПАР: {len(events)}. ПРОВЕРЯЕМ ЗАМЕНЫ (.DOCX) ===", flush=True)
 
+
 for link in soup.select("#bx_886362991_add tbody tr a.table__icon-file")[:4]:
     d_txt, href = link.get_text(strip=True), link.get("href")
     if not href or not re.match(r"\d{2}\.\d{2}\.\d{4}", d_txt):
@@ -220,7 +222,7 @@ for e in events:
     eh, em = map(int, en.split(":"))
 
     ev = Event()
-    pref = "⚡ [ЗАМЕНА] " if e["is_sub"] else ""
+    pref = "⚡️ [ЗАМЕНА] " if e["is_sub"] else ""
     ev.add("summary", f"{pref}{e['subj']}" + (f" ({e['sub']})" if e["sub"] else ""))
     ev.add("dtstart", datetime(e["y"], e["m"], e["d"], sh, sm, tzinfo=TIMEZONE))
     ev.add("dtend", datetime(e["y"], e["m"], e["d"], eh, em, tzinfo=TIMEZONE))
