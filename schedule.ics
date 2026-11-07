@@ -152,7 +152,10 @@ DESCRIPTION:Пара №: 5\nПреподаватель: Романова
 LOCATION:Каб. СДО.100
 END:VEVENT
 BEGIN:VEVENT
-SUMMARY:Информатика (Подгруппа: 1)
+SUMMARY:⚡️ [ЗАМЕНА] 56-11 (подг) / 1 / 56-11  [2] Инфор
+ матика Вак.Романова 4\, 1/335* / 56-11  [2] Информ
+ атика Антонов С.Л./Вак.Романова 4\, 1/335* (По
+ дгруппа: 1)
 DTSTART;TZID=Europe/Moscow:20261107T090000
 DTEND;TZID=Europe/Moscow:20261107T103000
 UID:2026-11-07-p1-Подгруппа: 1@petrocollege.ru
@@ -161,12 +164,15 @@ DESCRIPTION:Пара №: 1\nПреподаватель: Антонов С
 LOCATION:Каб. 1/335
 END:VEVENT
 BEGIN:VEVENT
-SUMMARY:Информатика (Подгруппа: 2)
+SUMMARY:⚡️ [ЗАМЕНА] 56-11 (подг) / 1 / 56-11  [2] Инфор
+ матика Вак.Романова 4\, 1/335* / 56-11  [2] Информ
+ атика Антонов С.Л./Вак.Романова 4\, 1/335* (По
+ дгруппа: 2)
 DTSTART;TZID=Europe/Moscow:20261107T090000
 DTEND;TZID=Europe/Moscow:20261107T103000
 UID:2026-11-07-p1-Подгруппа: 2@petrocollege.ru
-DESCRIPTION:Пара №: 1\nПреподаватель: Вакансия 
- Романова 4\nКабинет: 1/335*
+DESCRIPTION:Пара №: 1\nПреподаватель: Антонов С
+ ергей Ливерьевич\nКабинет: 1/335*
 LOCATION:Каб. 1/335*
 END:VEVENT
 BEGIN:VEVENT
@@ -204,5 +210,15 @@ UID:2026-11-07-p4-Подгруппа: 2@petrocollege.ru
 DESCRIPTION:Пара №: 4\nПреподаватель: Анисимов
  а Дарья Александровна\nКабинет: 4/108
 LOCATION:Каб. 4/108
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:⚡️ [ЗАМЕНА] 5 / 56-11   Русск.яз. Титова И
+ .Е.\, 1/201
+DTSTART;TZID=Europe/Moscow:20261107T161500
+DTEND;TZID=Europe/Moscow:20261107T174500
+UID:2026-11-07-p5-all@petrocollege.ru
+DESCRIPTION:Пара №: 5\nПреподаватель: Титова Ир
+ ина Евгеньевна\nКабинет: 1/201
+LOCATION:Каб. 1/201
 END:VEVENT
 END:VCALENDAR
