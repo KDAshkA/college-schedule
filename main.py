@@ -1,4 +1,4 @@
-print("=== [ШАГ 1] СТАРТ ПРОГРАММЫ ===", flush=True)
+Print("=== [ШАГ 1] СТАРТ ПРОГРАММЫ ===", flush=True)
 
 import io
 import os
@@ -55,7 +55,6 @@ with sync_playwright() as p:
     browser = p.chromium.launch(
         headless=is_github,
         args=["--no-sandbox", "--disable-dev-shm-usage", "--disable-blink-features=AutomationControlled"]
-page.screenshot(path="debug_error.png")
 
     )
     context = browser.new_context(
@@ -167,12 +166,29 @@ page.screenshot(path="debug_error.png")
         print(f" -> Установлена группа: [{chosen}] | Дата: [{date_str}]", flush=True)
         page.wait_for_timeout(500)
 
-        # 5. Нажимаем "Показать"
-        show_btn = page.locator("div.button.print-button", has_text="Показать")
-        if show_btn.count() > 0:
-            show_btn.first.click()
-        else:
-            page.locator(".print-button").first.click()
+        # ==========================================
+        # 5. ОБНОВЛЕННЫЙ БЛОК: Нажимаем "Показать" с отловом ошибки
+        # ==========================================
+        try:
+            print(" -> Ищем кнопку загрузки расписания...", flush=True)
+            # Явно ждем кнопку до 60 секунд, чтобы скрипт не падал сразу
+            fallback_btn = page.locator(".print-button").first
+            fallback_btn.wait_for(timeout=60000)
+
+            show_btn = page.locator("div.button.print-button", has_text="Показать")
+            if show_btn.count() > 0:
+                show_btn.first.click()
+            else:
+                fallback_btn.click()
+                
+        except Exception as e:
+            print(f"\n[!!! КРИТИЧЕСКАЯ ОШИБКА !!!] Не удалось найти кнопку загрузки.", flush=True)
+            print("Делаем скриншот всей страницы (full_page=True)...", flush=True)
+            # Сохраняем скриншот в корень, чтобы GitHub Actions его нашел
+            page.screenshot(path="debug_error.png", full_page=True)
+            print(f"Скриншот сохранен как 'debug_error.png'. Вызываем падение скрипта.\nДетали: {e}", flush=True)
+            raise e # Пробрасываем ошибку дальше, чтобы GitHub Action пометил запуск как Failed
+        # ==========================================
 
         # Ждем появления колонок расписания (вместо зависающего networkidle)
         try:
@@ -232,95 +248,4 @@ events = list(unique_events.values())
 print(f"\n=== [ШАГ 4] ВСЕГО СОБРАНО ПАР: {len(events)}. ПРОВЕРЯЕМ ЗАМЕНЫ (.DOCX) ===", flush=True)
 
 if len(events) == 0:
-    print("[ОШИБКА] Сайт вернул 0 пар! Старый файл schedule.ics не изменен.", flush=True)
-    raise SystemExit(1)
-
-if last_soup:
-    for link in last_soup.select("#bx_886362991_add tbody tr a.table__icon-file")[:5]:
-        d_txt, href = link.get_text(strip=True), link.get("href")
-        if not href or not re.match(r"\d{2}\.\d{2}\.\d{4}", d_txt):
-            continue
-        d, m, y = map(int, d_txt.split("."))
-        d_key = f"{y:04d}-{m:02d}-{d:02d}"
-        try:
-            r = requests.get(f"{BASE_URL}{href}", cookies=cookies, timeout=15)
-            if r.ok:
-                doc = docx.Document(io.BytesIO(r.content))
-                for tbl in doc.tables:
-                    for row in tbl.rows:
-                        cells = [c.text.strip() for c in row.cells]
-                        if TARGET_GROUP in " | ".join(cells):
-                            p_num = next((int(re.search(r"\b([1-6])\b", c).group(1)) for c in cells[1:3] if re.search(r"\b([1-6])\b", c)), None)
-                            info = " / ".join(dict.fromkeys([c for c in cells if c and c != TARGET_GROUP]))
-                            print(f" -> Найдена замена ({d_txt}): пара {p_num} -> {info}", flush=True)
-                            for e in events:
-                                if e["date_key"] == d_key and e["num"] == p_num:
-                                    e["subj"] = info
-                                    e["is_sub"] = True
-        except Exception as err:
-            print(f" -> Пропуск файла замен {d_txt}: {err}", flush=True)
-
-print("=== [ШАГ 5] СОХРАНЯЕМ КАЛЕНДАРЬ И ОТПРАВЛЯЕМ В TELEGRAM ===", flush=True)
-out_path = os.path.abspath("schedule.ics")
-
-cal = Calendar()
-cal.add("prodid", "-//Petrocollege//RU")
-cal.add("version", "2.0")
-cal.add("calscale", "GREGORIAN")
-cal.add("x-wr-calname", f"Расписание {TARGET_GROUP}")
-cal.add("x-wr-timezone", "Europe/Moscow")
-
-# Сохраняем прошлые недели из старого файла, чтобы история не пропадала
-existing = {}
-if os.path.exists(out_path) and os.path.getsize(out_path) > 50:
-    try:
-        with open(out_path, "rb") as f:
-            for comp in Calendar.from_ical(f.read()).walk("VEVENT"):
-                if comp.get("uid"):
-                    existing[str(comp.get("uid")).strip()] = comp
-    except Exception:
-        pass
-
-now_utc = datetime.now(timezone.utc)
-for e in events:
-    dt = datetime(e["y"], e["m"], e["d"])
-    s_map = BELL_SATURDAY if dt.weekday() == 5 else BELL_WEEKDAY
-    st, en = s_map.get(e["num"], ("18:15", "19:45"))
-    if "45 МИНУТ" in e["subj"].upper() and e["num"] == 1:
-        en = "09:45"
-    sh, sm = map(int, st.split(":"))
-    eh, em = map(int, en.split(":"))
-
-    uid = f"{e['date_key']}-p{e['num']}-{e['sub'] or 'all'}@petrocollege.ru"
-    ev = Event()
-    pref = "⚡️ [ЗАМЕНА] " if e["is_sub"] else ""
-    ev.add("summary", f"{pref}{e['subj']}" + (f" ({e['sub']})" if e["sub"] else ""))
-    ev.add("dtstart", datetime(e["y"], e["m"], e["d"], sh, sm, tzinfo=TIMEZONE))
-    ev.add("dtend", datetime(e["y"], e["m"], e["d"], eh, em, tzinfo=TIMEZONE))
-    ev.add("dtstamp", now_utc)
-    ev.add("location", f"Каб. {e['room']}")
-    ev.add("description", f"Пара №: {e['num']}\nПреподаватель: {e['teacher']}\nКабинет: {e['room']}")
-    ev.add("uid", uid)
-    existing[uid] = ev
-
-for comp in existing.values():
-    cal.add_component(comp)
-
-with open(out_path, "wb") as f:
-    f.write(cal.to_ical())
-
-if TG_TOKEN and TG_CHAT_ID:
-    print(" -> Отправляем файл в Telegram...", flush=True)
-    try:
-        with open(out_path, "rb") as f:
-            resp = requests.post(
-                f"https://api.telegram.org/bot{TG_TOKEN}/sendDocument",
-                data={"chat_id": TG_CHAT_ID, "caption": f"📅 Расписание {TARGET_GROUP} на 2 недели (собрано: {len(events)}, всего в базе: {len(existing)})"},
-                files={"document": f},
-                timeout=20
-            )
-        print(f" -> Статус Telegram: {resp.status_code}", flush=True)
-    except Exception as err:
-        print(f" -> Ошибка Telegram: {err}", flush=True)
-
-print(f"=== ФИНИШ! Файл сохранен: {out_path} ===", flush=True)
+    print("[ОШИБКА] Сайт вернул 0 пар
