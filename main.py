@@ -110,11 +110,11 @@ with sync_playwright() as p:
         filter_type.select_option("groups")
         filter_type.dispatch_event("change")
 
-        # 3. Ждем подгрузки списка групп (увеличен таймаут до 35 сек + резервная подстановка для GitHub)
+        # 3. Ждем подгрузки списка групп (увеличен таймаут до 60 сек + резервная подстановка для GitHub)
         try:
             page.wait_for_function(
                 f"() => {{ const s = document.querySelector('#third-option'); return s && Array.from(s.options).some(o => o.text.trim() === '{TARGET_GROUP}'); }}",
-                timeout=35000
+                timeout=60000
             )
         except Exception:
             print(" -> [!] Список групп подгружается медленно, создаем опцию 56-11 принудительно...", flush=True)
@@ -174,7 +174,7 @@ with sync_playwright() as p:
 
         # Ждем появления колонок расписания (вместо зависающего networkidle)
         try:
-            page.wait_for_selector("#schedule-list .rasp-calendar-col", timeout=20000)
+            page.wait_for_selector("#schedule-list .rasp-calendar-col", timeout=30000)
         except Exception:
             print(f" -> [!] На неделю ({date_str}) расписание на сайте пока пустое.", flush=True)
         page.wait_for_timeout(2000)
