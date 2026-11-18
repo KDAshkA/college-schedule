@@ -55,6 +55,8 @@ with sync_playwright() as p:
     browser = p.chromium.launch(
         headless=is_github,
         args=["--no-sandbox", "--disable-dev-shm-usage", "--disable-blink-features=AutomationControlled"]
+page.screenshot(path="debug_error.png")
+
     )
     context = browser.new_context(
         viewport={"width": 1280, "height": 900},
