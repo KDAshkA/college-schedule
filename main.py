@@ -1,4 +1,4 @@
-Print("=== [ШАГ 1] СТАРТ ПРОГРАММЫ ===", flush=True)
+print("=== [ШАГ 1] СТАРТ ПРОГРАММЫ ===", flush=True)
 
 import io
 import os
