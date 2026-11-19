@@ -75,7 +75,7 @@ with sync_playwright() as p:
             btn.first.click()
         else:
             page.locator("input[type='password']").first.press("Enter")
-        page.wait_for_selector(".filter-group", timeout=45000)
+        page.wait_for_selector("#timetable .filter-group", timeout=45000)
 
     today = datetime.now(TIMEZONE)
 
@@ -85,31 +85,31 @@ with sync_playwright() as p:
         date_str = target_dt.strftime("%Y-%m-%d")
         print(f"\n -> Загружаем расписание группы {TARGET_GROUP} на неделю ({date_str})...", flush=True)
 
-        # Открываем страницу заново перед второй неделей, чтобы сбросить состояние Select2
+        # Перезагружаем страницу перед 2-й неделей для чистого состояния Select2
         if shift > 0:
             print(" -> Перезагружаем страницу для чистого выбора 2-й недели...", flush=True)
             page.goto(URL, wait_until="domcontentloaded", timeout=60000)
 
-        page.wait_for_selector(".filter-group", timeout=30000)
+        page.wait_for_selector("#timetable .filter-group", timeout=30000)
         page.wait_for_timeout(800)
 
-        # Очищаем старую таблицу расписания, чтобы точно дождаться новой
-        page.evaluate("() => { const sl = document.querySelector('#schedule-list'); if (sl) sl.innerHTML = ''; }")
+        # Очищаем старый список расписания ([data-role="list"]), чтобы точно дождаться нового
+        page.evaluate("() => { const sl = document.querySelector('#timetable [data-role=\"list\"]'); if (sl) sl.innerHTML = ''; }")
 
         # 1. Вводим дату
-        date_input = page.locator("input.filter-date")
+        date_input = page.locator("#timetable input[data-role='date']")
         date_input.fill(date_str)
         date_input.dispatch_event("change")
-        page.evaluate("() => { const di = document.querySelector('input.filter-date'); if (di) di.blur(); }")
+        page.evaluate("() => { const di = document.querySelector('#timetable input[data-role=\"date\"]'); if (di) di.blur(); }")
         page.keyboard.press("Escape")
-        page.wait_for_timeout(1000)
+        page.wait_for_timeout(800)
 
         # 2. Выбираем режим "По группам"
-        filter_type = page.locator("select[name='filterType']")
+        filter_type = page.locator("#timetable select[data-role='filter']")
         filter_type.select_option("groups")
         filter_type.dispatch_event("change")
 
-        # 3. Ждем подгрузки списка групп (таймаут 60 сек + резервная подстановка)
+        # 3. Ждем подгрузки списка групп
         try:
             page.wait_for_function(
                 f"() => {{ const s = document.querySelector('#third-option'); return s && Array.from(s.options).some(o => o.text.trim() === '{TARGET_GROUP}'); }}",
@@ -118,8 +118,8 @@ with sync_playwright() as p:
         except Exception:
             print(" -> [!] Список групп подгружается медленно, создаем опцию 56-11 принудительно...", flush=True)
 
-        # 4. Выбираем группу 56-11 визуальным кликом через Select2
-        select2_box = page.locator(".filter-group .select2-selection--single")
+        # 4. Выбираем группу 56-11 (автоматически запускает загрузку расписания без кнопки "Показать")
+        select2_box = page.locator("#timetable .filter-group .select2-selection--single")
         if select2_box.count() > 0:
             try:
                 select2_box.first.click(timeout=5000)
@@ -136,10 +136,10 @@ with sync_playwright() as p:
             except Exception:
                 pass
 
-        # Страховка выбора через JS и jQuery
+        # Страховка выбора через JS и jQuery (триггерит обновление BX.College.Timetable)
         chosen = page.evaluate(
             """({groupName, groupUuid, dateStr}) => {
-                const di = document.querySelector('input.filter-date');
+                const di = document.querySelector('#timetable input[data-role="date"]');
                 if (di && di.value !== dateStr) {
                     di.value = dateStr;
                     di.dispatchEvent(new Event('change', { bubbles: true }));
@@ -162,42 +162,12 @@ with sync_playwright() as p:
             {"groupName": TARGET_GROUP, "groupUuid": TARGET_GROUP_UUID, "dateStr": date_str}
         )
         print(f" -> Установлена группа: [{chosen}] | Дата: [{date_str}]", flush=True)
-        page.wait_for_timeout(1000)
 
-        # 5. Нажимаем "Показать" + логируем, ЧТО именно нажалось
-        print(" -> Ищем кнопку 'Показать'...", flush=True)
-        clicked = False
-
-        candidate_selectors = [
-            ("div.print-button + Показать", page.locator("div.button.print-button", has_text=re.compile(r"Показать", re.I))),
-            ("любая кнопка + Показать", page.locator("button, a, div.button, input[type='submit'], input[type='button']", has_text=re.compile(r"Показать", re.I))),
-            ("текст Показать", page.get_by_text("Показать", exact=False)),
-            ("просто .print-button", page.locator(".print-button")),
-        ]
-
-        for name, loc in candidate_selectors:
-            if loc.count() > 0:
-                info = loc.first.evaluate("el => el.outerHTML.slice(0, 150)")
-                print(f" -> Найден селектор [{name}]: {info}", flush=True)
-                try:
-                    loc.first.click(timeout=5000, force=True)
-                    clicked = True
-                    break
-                except Exception:
-                    try:
-                        loc.first.evaluate("el => el.click()")
-                        clicked = True
-                        break
-                    except Exception:
-                        pass
-
-        # Ждем появления колонок расписания
+        # 5. Ждем автоподгрузки колонок расписания в [data-role="list"]
         try:
-            page.wait_for_selector("#schedule-list .rasp-calendar-col", timeout=20000)
+            page.wait_for_selector('#timetable [data-role="list"] .rasp-calendar-col', timeout=30000)
         except Exception:
-            print(f" -> [!] Колонки .rasp-calendar-col не появились ({date_str}).", flush=True)
-            sl_html = page.evaluate("() => { const el = document.querySelector('#schedule-list'); return el ? el.innerHTML.slice(0, 600) : 'Элемент #schedule-list не найден'; }")
-            print(f" -> Содержимое #schedule-list:\n{sl_html}\n", flush=True)
+            print(f" -> [!] На неделю ({date_str}) расписание на сайте пока пустое.", flush=True)
             page.screenshot(path="debug_error.png", full_page=True)
         page.wait_for_timeout(2000)
 
@@ -208,7 +178,7 @@ with sync_playwright() as p:
         byear, bmonth = target_dt.year, target_dt.month
         week_pairs = 0
 
-        for col in soup.select("#schedule-list .rasp-calendar-col"):
+        for col in soup.select('#timetable [data-role="list"] .rasp-calendar-col'):
             d_el = col.select_one(".rasp-calendar__date")
             if not d_el:
                 continue
