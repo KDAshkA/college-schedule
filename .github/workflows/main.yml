@@ -35,3 +35,10 @@ jobs:
           name: debug-error-screenshot
           path: debug_error.png
           retention-days: 3
+   - name: Run scraper
+     env:
+       PORTAL_LOGIN: ${{ secrets.PORTAL_LOGIN }}
+       PORTAL_PASSWORD: ${{ secrets.PORTAL_PASSWORD }}
+       TG_TOKEN: ${{ secrets.TG_TOKEN }}
+       TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+     run: python main.py
