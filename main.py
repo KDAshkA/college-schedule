@@ -162,26 +162,73 @@ with sync_playwright() as p:
             {"groupName": TARGET_GROUP, "groupUuid": TARGET_GROUP_UUID, "dateStr": date_str}
         )
         print(f" -> Установлена группа: [{chosen}] | Дата: [{date_str}]", flush=True)
-        page.wait_for_timeout(500)
+        page.wait_for_timeout(1000)
 
-        # 5. Нажимаем "Показать" (ищем только видимую кнопку)
-        try:
-            print(" -> Ищем видимую кнопку 'Показать'...", flush=True)
-            show_btn = page.locator("div.button.print-button:visible", has_text="Показать").first
-            show_btn.wait_for(state="visible", timeout=60000)
-            show_btn.click()
-        except Exception as e:
-            print("\n[!!! КРИТИЧЕСКАЯ ОШИБКА !!!] Кнопка 'Показать' не найдена или скрыта.", flush=True)
-            print(f"Текущий URL: {page.url}", flush=True)
+        # 5. Нажимаем "Показать" (универсальный поиск + принудительный клик через JS)
+        print(" -> Ищем кнопку 'Показать'...", flush=True)
+        clicked = False
+
+        # Вариант А: ищем по тексту "Показать" среди любых кликабельных элементов
+        candidate_selectors = [
+            page.locator("div.button.print-button", has_text=re.compile(r"Показать", re.I)),
+            page.locator("button, a, div.button, input[type='submit'], input[type='button']", has_text=re.compile(r"Показать", re.I)),
+            page.get_by_text("Показать", exact=False),
+            page.locator(".print-button"),
+        ]
+
+        for loc in candidate_selectors:
+            if loc.count() > 0:
+                try:
+                    loc.first.click(timeout=5000, force=True)
+                    clicked = True
+                    print(" -> Кнопка нажата через Playwright.", flush=True)
+                    break
+                except Exception:
+                    try:
+                        loc.first.evaluate("el => el.click()")
+                        clicked = True
+                        print(" -> Кнопка нажата через JS.", flush=True)
+                        break
+                    except Exception:
+                        pass
+
+        # Вариант Б: если Playwright не нашел, ищем и кликаем напрямую через JS по всему DOM
+        if not clicked:
+            js_clicked = page.evaluate(
+                """() => {
+                    const els = Array.from(document.querySelectorAll('button, a, div, input'));
+                    const target = els.find(el => {
+                        const txt = (el.innerText || el.value || '').trim().toLowerCase();
+                        return txt === 'показать' || el.classList.contains('print-button');
+                    });
+                    if (target) {
+                        target.click();
+                        return target.outerHTML.slice(0, 120);
+                    }
+                    return null;
+                }"""
+            )
+            if js_clicked:
+                clicked = True
+                print(f" -> Кнопка нажата через JS DOM: {js_clicked}", flush=True)
+
+        if not clicked:
+            print(" -> [!] Кнопка 'Показать' не найдена. Проверяем, загрузилось ли расписание само...", flush=True)
+            print(f" -> Текущий URL: {page.url}", flush=True)
             page.screenshot(path="debug_error.png", full_page=True)
-            print(f"Скриншот сохранен как 'debug_error.png'.\nДетали: {e}", flush=True)
-            raise e
+            buttons_dump = page.evaluate(
+                """() => Array.from(document.querySelectorAll('button, .button, input[type="submit"], input[type="button"]'))
+                    .map(el => (el.innerText || el.value || el.className || '').trim())
+                    .filter(Boolean).slice(0, 15)"""
+            )
+            print(f" -> Найденные кнопки на странице: {buttons_dump}", flush=True)
 
         # Ждем появления колонок расписания
         try:
             page.wait_for_selector("#schedule-list .rasp-calendar-col", timeout=30000)
         except Exception:
             print(f" -> [!] На неделю ({date_str}) расписание на сайте пока пустое.", flush=True)
+            page.screenshot(path="debug_error.png", full_page=True)
         page.wait_for_timeout(2000)
 
         # 6. Разбираем HTML загруженной недели
