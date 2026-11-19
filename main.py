@@ -164,70 +164,40 @@ with sync_playwright() as p:
         print(f" -> Установлена группа: [{chosen}] | Дата: [{date_str}]", flush=True)
         page.wait_for_timeout(1000)
 
-        # 5. Нажимаем "Показать" (универсальный поиск + принудительный клик через JS)
+        # 5. Нажимаем "Показать" + логируем, ЧТО именно нажалось
         print(" -> Ищем кнопку 'Показать'...", flush=True)
         clicked = False
 
-        # Вариант А: ищем по тексту "Показать" среди любых кликабельных элементов
         candidate_selectors = [
-            page.locator("div.button.print-button", has_text=re.compile(r"Показать", re.I)),
-            page.locator("button, a, div.button, input[type='submit'], input[type='button']", has_text=re.compile(r"Показать", re.I)),
-            page.get_by_text("Показать", exact=False),
-            page.locator(".print-button"),
+            ("div.print-button + Показать", page.locator("div.button.print-button", has_text=re.compile(r"Показать", re.I))),
+            ("любая кнопка + Показать", page.locator("button, a, div.button, input[type='submit'], input[type='button']", has_text=re.compile(r"Показать", re.I))),
+            ("текст Показать", page.get_by_text("Показать", exact=False)),
+            ("просто .print-button", page.locator(".print-button")),
         ]
 
-        for loc in candidate_selectors:
+        for name, loc in candidate_selectors:
             if loc.count() > 0:
+                info = loc.first.evaluate("el => el.outerHTML.slice(0, 150)")
+                print(f" -> Найден селектор [{name}]: {info}", flush=True)
                 try:
                     loc.first.click(timeout=5000, force=True)
                     clicked = True
-                    print(" -> Кнопка нажата через Playwright.", flush=True)
                     break
                 except Exception:
                     try:
                         loc.first.evaluate("el => el.click()")
                         clicked = True
-                        print(" -> Кнопка нажата через JS.", flush=True)
                         break
                     except Exception:
                         pass
 
-        # Вариант Б: если Playwright не нашел, ищем и кликаем напрямую через JS по всему DOM
-        if not clicked:
-            js_clicked = page.evaluate(
-                """() => {
-                    const els = Array.from(document.querySelectorAll('button, a, div, input'));
-                    const target = els.find(el => {
-                        const txt = (el.innerText || el.value || '').trim().toLowerCase();
-                        return txt === 'показать' || el.classList.contains('print-button');
-                    });
-                    if (target) {
-                        target.click();
-                        return target.outerHTML.slice(0, 120);
-                    }
-                    return null;
-                }"""
-            )
-            if js_clicked:
-                clicked = True
-                print(f" -> Кнопка нажата через JS DOM: {js_clicked}", flush=True)
-
-        if not clicked:
-            print(" -> [!] Кнопка 'Показать' не найдена. Проверяем, загрузилось ли расписание само...", flush=True)
-            print(f" -> Текущий URL: {page.url}", flush=True)
-            page.screenshot(path="debug_error.png", full_page=True)
-            buttons_dump = page.evaluate(
-                """() => Array.from(document.querySelectorAll('button, .button, input[type="submit"], input[type="button"]'))
-                    .map(el => (el.innerText || el.value || el.className || '').trim())
-                    .filter(Boolean).slice(0, 15)"""
-            )
-            print(f" -> Найденные кнопки на странице: {buttons_dump}", flush=True)
-
         # Ждем появления колонок расписания
         try:
-            page.wait_for_selector("#schedule-list .rasp-calendar-col", timeout=30000)
+            page.wait_for_selector("#schedule-list .rasp-calendar-col", timeout=20000)
         except Exception:
-            print(f" -> [!] На неделю ({date_str}) расписание на сайте пока пустое.", flush=True)
+            print(f" -> [!] Колонки .rasp-calendar-col не появились ({date_str}).", flush=True)
+            sl_html = page.evaluate("() => { const el = document.querySelector('#schedule-list'); return el ? el.innerHTML.slice(0, 600) : 'Элемент #schedule-list не найден'; }")
+            print(f" -> Содержимое #schedule-list:\n{sl_html}\n", flush=True)
             page.screenshot(path="debug_error.png", full_page=True)
         page.wait_for_timeout(2000)
 
