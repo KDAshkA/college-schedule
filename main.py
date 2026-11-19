@@ -25,6 +25,8 @@ PASSWORD = (os.getenv("PORTAL_PASSWORD") or "aS79XBqrVU").strip()
 TARGET_GROUP = "56-11"
 TARGET_GROUP_UUID = "b19cd1cf-f504-11f0-80c0-bc0d9b767ccf"
 
+# Для запуска на ПК в PyCharm можно вписать токен и ID вместо пустых кавычек ""
+# В GitHub Actions они подтянутся автоматически из Secrets
 TG_TOKEN = (os.getenv("TG_TOKEN") or "").strip()
 TG_CHAT_ID = (os.getenv("TG_CHAT_ID") or "").strip()
 
@@ -299,18 +301,27 @@ for comp in existing.values():
 with open(out_path, "wb") as f:
     f.write(cal.to_ical())
 
+# Отправка файла в Telegram с подробным выводом статуса
 if TG_TOKEN and TG_CHAT_ID:
-    print(" -> Отправляем файл в Telegram...", flush=True)
+    print(" -> Отправляем файл schedule.ics в Telegram...", flush=True)
     try:
         with open(out_path, "rb") as f:
             resp = requests.post(
                 f"https://api.telegram.org/bot{TG_TOKEN}/sendDocument",
-                data={"chat_id": TG_CHAT_ID, "caption": f"📅 Расписание {TARGET_GROUP} на 2 недели (собрано: {len(events)}, всего в базе: {len(existing)})"},
+                data={
+                    "chat_id": TG_CHAT_ID,
+                    "caption": f"📅 Расписание {TARGET_GROUP} на 2 недели (собрано: {len(events)}, всего в базе: {len(existing)})"
+                },
                 files={"document": f},
                 timeout=20
             )
-        print(f" -> Статус Telegram: {resp.status_code}", flush=True)
+        if resp.ok:
+            print(f" -> Успешно отправлено в Telegram! (Статус: {resp.status_code})", flush=True)
+        else:
+            print(f" -> [!] Ошибка Telegram API ({resp.status_code}): {resp.text}", flush=True)
     except Exception as err:
-        print(f" -> Ошибка Telegram: {err}", flush=True)
+        print(f" -> [!] Ошибка подключения к Telegram: {err}", flush=True)
+else:
+    print(" -> [!] ПРОПУСК TELEGRAM: Переменные TG_TOKEN или TG_CHAT_ID не заданы!", flush=True)
 
 print(f"=== ФИНИШ! Файл сохранен: {out_path} ===", flush=True)
