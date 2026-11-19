@@ -55,7 +55,6 @@ with sync_playwright() as p:
     browser = p.chromium.launch(
         headless=is_github,
         args=["--no-sandbox", "--disable-dev-shm-usage", "--disable-blink-features=AutomationControlled"]
-
     )
     context = browser.new_context(
         viewport={"width": 1280, "height": 900},
@@ -86,8 +85,7 @@ with sync_playwright() as p:
         date_str = target_dt.strftime("%Y-%m-%d")
         print(f"\n -> Загружаем расписание группы {TARGET_GROUP} на неделю ({date_str})...", flush=True)
 
-        # ГЛАВНЫЙ СЕКРЕТ ДЛЯ 2-Й НЕДЕЛИ:
-        # Открываем страницу заново перед второй неделей, чтобы сбросить старое состояние Select2!
+        # Открываем страницу заново перед второй неделей, чтобы сбросить состояние Select2
         if shift > 0:
             print(" -> Перезагружаем страницу для чистого выбора 2-й недели...", flush=True)
             page.goto(URL, wait_until="domcontentloaded", timeout=60000)
@@ -98,7 +96,7 @@ with sync_playwright() as p:
         # Очищаем старую таблицу расписания, чтобы точно дождаться новой
         page.evaluate("() => { const sl = document.querySelector('#schedule-list'); if (sl) sl.innerHTML = ''; }")
 
-        # 1. Вводим дату (только для 2-й недели или при смене, закрывая всплывающий календарь)
+        # 1. Вводим дату
         date_input = page.locator("input.filter-date")
         date_input.fill(date_str)
         date_input.dispatch_event("change")
@@ -106,12 +104,12 @@ with sync_playwright() as p:
         page.keyboard.press("Escape")
         page.wait_for_timeout(1000)
 
-        # 2. Выбираем режим "По группам" (на свежей странице он всегда срабатывает с первого раза!)
+        # 2. Выбираем режим "По группам"
         filter_type = page.locator("select[name='filterType']")
         filter_type.select_option("groups")
         filter_type.dispatch_event("change")
 
-        # 3. Ждем подгрузки списка групп (увеличен таймаут до 60 сек + резервная подстановка для GitHub)
+        # 3. Ждем подгрузки списка групп (таймаут 60 сек + резервная подстановка)
         try:
             page.wait_for_function(
                 f"() => {{ const s = document.querySelector('#third-option'); return s && Array.from(s.options).some(o => o.text.trim() === '{TARGET_GROUP}'); }}",
@@ -138,7 +136,7 @@ with sync_playwright() as p:
             except Exception:
                 pass
 
-        # Железная страховка выбора через JS и jQuery (вставляет опцию, даже если список не прогрузился)
+        # Страховка выбора через JS и jQuery
         chosen = page.evaluate(
             """({groupName, groupUuid, dateStr}) => {
                 const di = document.querySelector('input.filter-date');
@@ -166,31 +164,20 @@ with sync_playwright() as p:
         print(f" -> Установлена группа: [{chosen}] | Дата: [{date_str}]", flush=True)
         page.wait_for_timeout(500)
 
-        # ==========================================
-        # 5. ОБНОВЛЕННЫЙ БЛОК: Нажимаем "Показать" с отловом ошибки
-        # ==========================================
+        # 5. Нажимаем "Показать" (ищем только видимую кнопку)
         try:
-            print(" -> Ищем кнопку загрузки расписания...", flush=True)
-            # Явно ждем кнопку до 60 секунд, чтобы скрипт не падал сразу
-            fallback_btn = page.locator(".print-button").first
-            fallback_btn.wait_for(timeout=60000)
-
-            show_btn = page.locator("div.button.print-button", has_text="Показать")
-            if show_btn.count() > 0:
-                show_btn.first.click()
-            else:
-                fallback_btn.click()
-                
+            print(" -> Ищем видимую кнопку 'Показать'...", flush=True)
+            show_btn = page.locator("div.button.print-button:visible", has_text="Показать").first
+            show_btn.wait_for(state="visible", timeout=60000)
+            show_btn.click()
         except Exception as e:
-            print(f"\n[!!! КРИТИЧЕСКАЯ ОШИБКА !!!] Не удалось найти кнопку загрузки.", flush=True)
-            print("Делаем скриншот всей страницы (full_page=True)...", flush=True)
-            # Сохраняем скриншот в корень, чтобы GitHub Actions его нашел
+            print("\n[!!! КРИТИЧЕСКАЯ ОШИБКА !!!] Кнопка 'Показать' не найдена или скрыта.", flush=True)
+            print(f"Текущий URL: {page.url}", flush=True)
             page.screenshot(path="debug_error.png", full_page=True)
-            print(f"Скриншот сохранен как 'debug_error.png'. Вызываем падение скрипта.\nДетали: {e}", flush=True)
-            raise e # Пробрасываем ошибку дальше, чтобы GitHub Action пометил запуск как Failed
-        # ==========================================
+            print(f"Скриншот сохранен как 'debug_error.png'.\nДетали: {e}", flush=True)
+            raise e
 
-        # Ждем появления колонок расписания (вместо зависающего networkidle)
+        # Ждем появления колонок расписания
         try:
             page.wait_for_selector("#schedule-list .rasp-calendar-col", timeout=30000)
         except Exception:
