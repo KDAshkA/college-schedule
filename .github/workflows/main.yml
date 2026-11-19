@@ -1,44 +1,42 @@
-name: Schedule Parser
+name: Auto Update Schedule
 
 on:
   schedule:
-    - cron: '0 5 * * *' # Твое расписание запуска (оставь свое, если отличается)
-  workflow_dispatch: # Позволяет запускать скрипт вручную кнопкой
+    - cron: '0 */5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  scrape:
+  update:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          cache: 'pip' # Включаем кэш, чтобы не качать библиотеки каждый раз
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install -r requirements.txt
-          playwright install chromium # Качаем ТОЛЬКО Chromium (экономит время)
+          playwright install --with-deps chromium
 
       - name: Run scraper
-        # ВАЖНО: Замени scraper.py на реальное имя твоего скрипта!
-        run: python main.py 
+        env:
+          PORTAL_LOGIN: ${{ secrets.PORTAL_LOGIN }}
+          PORTAL_PASSWORD: ${{ secrets.PORTAL_PASSWORD }}
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+        run: python main.py
 
-      - name: Upload debug screenshot
-        if: failure() # Этот шаг выполнится ТОЛЬКО если скрипт (шаг выше) выдаст ошибку
-        uses: actions/upload-artifact@v4
-        with:
-          name: debug-error-screenshot
-          path: debug_error.png
-          retention-days: 3
-   - name: Run scraper
-     env:
-       PORTAL_LOGIN: ${{ secrets.PORTAL_LOGIN }}
-       PORTAL_PASSWORD: ${{ secrets.PORTAL_PASSWORD }}
-       TG_TOKEN: ${{ secrets.TG_TOKEN }}
-       TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
-     run: python main.py
+      - name: Save updated schedule.ics
+        run: |
+          git config user.name "Schedule Bot"
+          git config user.email "bot@github.com"
+          git add schedule.ics
+          git diff --staged --quiet || git commit -m "Auto-update schedule"
+          git push
