@@ -816,7 +816,7 @@ BEGIN:VEVENT
 SUMMARY:Обществознание
 DTSTART;TZID=Europe/Moscow:20261124T090000
 DTEND;TZID=Europe/Moscow:20261124T103000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-24-p1-all@petrocollege.ru
 DESCRIPTION:Пара №: 1\nПреподаватель: Якушкин М
  аксим Васильевич\nКабинет: 1/307
@@ -826,7 +826,7 @@ BEGIN:VEVENT
 SUMMARY:Математика
 DTSTART;TZID=Europe/Moscow:20261124T105000
 DTEND;TZID=Europe/Moscow:20261124T122000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-24-p2-all@petrocollege.ru
 DESCRIPTION:Пара №: 2\nПреподаватель: Паллонен 
  Ирина Анатольевна\nКабинет: 1/221
@@ -836,7 +836,7 @@ BEGIN:VEVENT
 SUMMARY:Русский язык
 DTSTART;TZID=Europe/Moscow:20261124T130500
 DTEND;TZID=Europe/Moscow:20261124T143500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-24-p3-all@petrocollege.ru
 DESCRIPTION:Пара №: 3\nПреподаватель: Титова Ир
  ина Евгеньевна\nКабинет: 1/201
@@ -847,7 +847,7 @@ SUMMARY:ДОП Современные траектории професс
  иональной карьеры
 DTSTART;TZID=Europe/Moscow:20261124T145000
 DTEND;TZID=Europe/Moscow:20261124T162000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-24-p4-all@petrocollege.ru
 DESCRIPTION:Пара №: 4\nПреподаватель: Зорина Ел
  ена Сергеевна\nКабинет: 1/306
@@ -857,7 +857,7 @@ BEGIN:VEVENT
 SUMMARY:Математика
 DTSTART;TZID=Europe/Moscow:20261125T181500
 DTEND;TZID=Europe/Moscow:20261125T194500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-25-p6-all@petrocollege.ru
 DESCRIPTION:Пара №: 6\nПреподаватель: Паллонен 
  Ирина Анатольевна\nКабинет: СДО.139
@@ -867,7 +867,7 @@ BEGIN:VEVENT
 SUMMARY:Основы безопасности и защиты Родины
 DTSTART;TZID=Europe/Moscow:20261126T090000
 DTEND;TZID=Europe/Moscow:20261126T103000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-26-p1-all@petrocollege.ru
 DESCRIPTION:Пара №: 1\nПреподаватель: Смирнова 
  Диана Яковлевна\nКабинет: 1/206
@@ -877,7 +877,7 @@ BEGIN:VEVENT
 SUMMARY:Физическая культура (Подгруппа: 1)
 DTSTART;TZID=Europe/Moscow:20261126T105000
 DTEND;TZID=Europe/Moscow:20261126T122000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-26-p2-Подгруппа: 1@petrocollege.ru
 DESCRIPTION:Пара №: 2\nПреподаватель: Соболева 
  Галина Михайловна\nКабинет: 1/С.зал №1
@@ -887,7 +887,7 @@ BEGIN:VEVENT
 SUMMARY:Физическая культура (Подгруппа: 2)
 DTSTART;TZID=Europe/Moscow:20261126T105000
 DTEND;TZID=Europe/Moscow:20261126T122000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-26-p2-Подгруппа: 2@petrocollege.ru
 DESCRIPTION:Пара №: 2\nПреподаватель: Карнаухо
  ва Анастасия Владимировна\nКабинет: 1/С.з
@@ -898,7 +898,7 @@ BEGIN:VEVENT
 SUMMARY:Физика
 DTSTART;TZID=Europe/Moscow:20261126T130500
 DTEND;TZID=Europe/Moscow:20261126T143500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-26-p3-all@petrocollege.ru
 DESCRIPTION:Пара №: 3\nПреподаватель: Романова 
  Галина Алексеевна\nКабинет: 4/306
@@ -908,7 +908,7 @@ BEGIN:VEVENT
 SUMMARY:Математика
 DTSTART;TZID=Europe/Moscow:20261126T145000
 DTEND;TZID=Europe/Moscow:20261126T162000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-26-p4-all@petrocollege.ru
 DESCRIPTION:Пара №: 4\nПреподаватель: Паллонен 
  Ирина Анатольевна\nКабинет: 1/221
@@ -918,7 +918,7 @@ BEGIN:VEVENT
 SUMMARY:РАЗГОВОРЫ О ВАЖНОМ 45 МИНУТ
 DTSTART;TZID=Europe/Moscow:20261126T163500
 DTEND;TZID=Europe/Moscow:20261126T180500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-26-p5-all@petrocollege.ru
 DESCRIPTION:Пара №: 5\nПреподаватель: Паллонен 
  Ирина Анатольевна\nКабинет: 1/221
@@ -928,7 +928,7 @@ BEGIN:VEVENT
 SUMMARY:Литература
 DTSTART;TZID=Europe/Moscow:20261127T090000
 DTEND;TZID=Europe/Moscow:20261127T103000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-27-p1-all@petrocollege.ru
 DESCRIPTION:Пара №: 1\nПреподаватель: Титова Ир
  ина Евгеньевна\nКабинет: 1/201
@@ -938,7 +938,7 @@ BEGIN:VEVENT
 SUMMARY:История
 DTSTART;TZID=Europe/Moscow:20261127T105000
 DTEND;TZID=Europe/Moscow:20261127T122000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-27-p2-all@petrocollege.ru
 DESCRIPTION:Пара №: 2\nПреподаватель: Максимов 
  Всеволод Дмитриевич\nКабинет: 2/102
@@ -948,7 +948,7 @@ BEGIN:VEVENT
 SUMMARY:Русский язык
 DTSTART;TZID=Europe/Moscow:20261127T130500
 DTEND;TZID=Europe/Moscow:20261127T143500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-27-p3-all@petrocollege.ru
 DESCRIPTION:Пара №: 3\nПреподаватель: Титова Ир
  ина Евгеньевна\nКабинет: 1/201
@@ -958,7 +958,7 @@ BEGIN:VEVENT
 SUMMARY:География
 DTSTART;TZID=Europe/Moscow:20261127T145000
 DTEND;TZID=Europe/Moscow:20261127T162000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-27-p4-all@petrocollege.ru
 DESCRIPTION:Пара №: 4\nПреподаватель: Чемисова 
  Наталья Анатольевна\nКабинет: 1/329
@@ -968,7 +968,7 @@ BEGIN:VEVENT
 SUMMARY:Информатика (Подгруппа: 1)
 DTSTART;TZID=Europe/Moscow:20261128T090000
 DTEND;TZID=Europe/Moscow:20261128T103000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-28-p1-Подгруппа: 1@petrocollege.ru
 DESCRIPTION:Пара №: 1\nПреподаватель: Антонов С
  ергей Ливерьевич\nКабинет: 1/335
@@ -978,7 +978,7 @@ BEGIN:VEVENT
 SUMMARY:Информатика (Подгруппа: 2)
 DTSTART;TZID=Europe/Moscow:20261128T090000
 DTEND;TZID=Europe/Moscow:20261128T103000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-28-p1-Подгруппа: 2@petrocollege.ru
 DESCRIPTION:Пара №: 1\nПреподаватель: Вакансия 
  Романова 4\nКабинет: 1/335*
@@ -988,7 +988,7 @@ BEGIN:VEVENT
 SUMMARY:Математика
 DTSTART;TZID=Europe/Moscow:20261128T104500
 DTEND;TZID=Europe/Moscow:20261128T121500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-28-p2-all@petrocollege.ru
 DESCRIPTION:Пара №: 2\nПреподаватель: Паллонен 
  Ирина Анатольевна\nКабинет: 1/221
@@ -998,7 +998,7 @@ BEGIN:VEVENT
 SUMMARY:Биология
 DTSTART;TZID=Europe/Moscow:20261128T124500
 DTEND;TZID=Europe/Moscow:20261128T141500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-28-p3-all@petrocollege.ru
 DESCRIPTION:Пара №: 3\nПреподаватель: Соплина О
  льга Николаевна\nКабинет: 1/205
@@ -1008,7 +1008,7 @@ BEGIN:VEVENT
 SUMMARY:Иностранный язык (Подгруппа: 2)
 DTSTART;TZID=Europe/Moscow:20261128T143000
 DTEND;TZID=Europe/Moscow:20261128T160000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-28-p4-Подгруппа: 2@petrocollege.ru
 DESCRIPTION:Пара №: 4\nПреподаватель: Анисимов
  а Дарья Александровна\nКабинет: 4/108
@@ -1018,7 +1018,7 @@ BEGIN:VEVENT
 SUMMARY:Иностранный язык (Подгруппа: 1)
 DTSTART;TZID=Europe/Moscow:20261128T143000
 DTEND;TZID=Europe/Moscow:20261128T160000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-28-p4-Подгруппа: 1@petrocollege.ru
 DESCRIPTION:Пара №: 4\nПреподаватель: Журавлев
  а Ирина Львовна\nКабинет: 4/110
@@ -1028,7 +1028,7 @@ BEGIN:VEVENT
 SUMMARY:Основы безопасности и защиты Родины
 DTSTART;TZID=Europe/Moscow:20261128T180000
 DTEND;TZID=Europe/Moscow:20261128T193000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-28-p6-all@petrocollege.ru
 DESCRIPTION:Пара №: 6\nПреподаватель: Смирнова 
  Диана Яковлевна\nКабинет: СДО.28
@@ -1039,7 +1039,7 @@ SUMMARY:ДОП Современные траектории професс
  иональной карьеры
 DTSTART;TZID=Europe/Moscow:20261130T105000
 DTEND;TZID=Europe/Moscow:20261130T122000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-30-p2-all@petrocollege.ru
 DESCRIPTION:Пара №: 2\nПреподаватель: Зорина Ел
  ена Сергеевна\nКабинет: 1/205
@@ -1049,7 +1049,7 @@ BEGIN:VEVENT
 SUMMARY:Физика
 DTSTART;TZID=Europe/Moscow:20261130T130500
 DTEND;TZID=Europe/Moscow:20261130T143500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-30-p3-all@petrocollege.ru
 DESCRIPTION:Пара №: 3\nПреподаватель: Романова 
  Галина Алексеевна\nКабинет: 4/306
@@ -1059,7 +1059,7 @@ BEGIN:VEVENT
 SUMMARY:Математика
 DTSTART;TZID=Europe/Moscow:20261130T181500
 DTEND;TZID=Europe/Moscow:20261130T194500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-11-30-p6-all@petrocollege.ru
 DESCRIPTION:Пара №: 6\nПреподаватель: Паллонен 
  Ирина Анатольевна\nКабинет: СДО.139
@@ -1069,7 +1069,7 @@ BEGIN:VEVENT
 SUMMARY:Русский язык
 DTSTART;TZID=Europe/Moscow:20261202T090000
 DTEND;TZID=Europe/Moscow:20261202T103000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-02-p1-all@petrocollege.ru
 DESCRIPTION:Пара №: 1\nПреподаватель: Титова Ир
  ина Евгеньевна\nКабинет: 1/201
@@ -1080,7 +1080,7 @@ SUMMARY:ДОП Современные траектории професс
  иональной карьеры
 DTSTART;TZID=Europe/Moscow:20261202T105000
 DTEND;TZID=Europe/Moscow:20261202T122000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-02-p2-all@petrocollege.ru
 DESCRIPTION:Пара №: 2\nПреподаватель: Зорина Ел
  ена Сергеевна\nКабинет: 1/330
@@ -1090,7 +1090,7 @@ BEGIN:VEVENT
 SUMMARY:Химия
 DTSTART;TZID=Europe/Moscow:20261202T130500
 DTEND;TZID=Europe/Moscow:20261202T143500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-02-p3-all@petrocollege.ru
 DESCRIPTION:Пара №: 3\nПреподаватель: Худова Ан
  на Вадимовна\nКабинет: 4/307
@@ -1100,7 +1100,7 @@ BEGIN:VEVENT
 SUMMARY:Литература
 DTSTART;TZID=Europe/Moscow:20261202T145000
 DTEND;TZID=Europe/Moscow:20261202T162000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-02-p4-all@petrocollege.ru
 DESCRIPTION:Пара №: 4\nПреподаватель: Титова Ир
  ина Евгеньевна\nКабинет: 1/201
@@ -1110,7 +1110,7 @@ BEGIN:VEVENT
 SUMMARY:РАЗГОВОРЫ О ВАЖНОМ 45 МИНУТ
 DTSTART;TZID=Europe/Moscow:20261202T163500
 DTEND;TZID=Europe/Moscow:20261202T180500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-02-p5-all@petrocollege.ru
 DESCRIPTION:Пара №: 5\nПреподаватель: Паллонен 
  Ирина Анатольевна\nКабинет: 1/221
@@ -1120,7 +1120,7 @@ BEGIN:VEVENT
 SUMMARY:История
 DTSTART;TZID=Europe/Moscow:20261203T090000
 DTEND;TZID=Europe/Moscow:20261203T103000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-03-p1-all@petrocollege.ru
 DESCRIPTION:Пара №: 1\nПреподаватель: Максимов 
  Всеволод Дмитриевич\nКабинет: 2/215
@@ -1130,7 +1130,7 @@ BEGIN:VEVENT
 SUMMARY:Математика
 DTSTART;TZID=Europe/Moscow:20261203T105000
 DTEND;TZID=Europe/Moscow:20261203T122000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-03-p2-all@petrocollege.ru
 DESCRIPTION:Пара №: 2\nПреподаватель: Паллонен 
  Ирина Анатольевна\nКабинет: 1/221
@@ -1140,7 +1140,7 @@ BEGIN:VEVENT
 SUMMARY:Физика (Подгруппа: 1)
 DTSTART;TZID=Europe/Moscow:20261203T130500
 DTEND;TZID=Europe/Moscow:20261203T143500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-03-p3-Подгруппа: 1@petrocollege.ru
 DESCRIPTION:Пара №: 3\nПреподаватель: Романова 
  Галина Алексеевна\nКабинет: 4/306
@@ -1150,7 +1150,7 @@ BEGIN:VEVENT
 SUMMARY:Физика (Подгруппа: 2)
 DTSTART;TZID=Europe/Moscow:20261203T130500
 DTEND;TZID=Europe/Moscow:20261203T143500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-03-p3-Подгруппа: 2@petrocollege.ru
 DESCRIPTION:Пара №: 3\nПреподаватель: Вакансия 
  Романова 14\nКабинет: СДО.99
@@ -1160,7 +1160,7 @@ BEGIN:VEVENT
 SUMMARY:Физическая культура (Подгруппа: 1)
 DTSTART;TZID=Europe/Moscow:20261203T145000
 DTEND;TZID=Europe/Moscow:20261203T162000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-03-p4-Подгруппа: 1@petrocollege.ru
 DESCRIPTION:Пара №: 4\nПреподаватель: Соболева 
  Галина Михайловна\nКабинет: 1/С.зал №1'
@@ -1170,7 +1170,7 @@ BEGIN:VEVENT
 SUMMARY:Физическая культура (Подгруппа: 2)
 DTSTART;TZID=Europe/Moscow:20261203T145000
 DTEND;TZID=Europe/Moscow:20261203T162000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-03-p4-Подгруппа: 2@petrocollege.ru
 DESCRIPTION:Пара №: 4\nПреподаватель: Карнаухо
  ва Анастасия Владимировна\nКабинет: 1/С.з
@@ -1181,7 +1181,7 @@ BEGIN:VEVENT
 SUMMARY:Информатика (Подгруппа: 1)
 DTSTART;TZID=Europe/Moscow:20261204T090000
 DTEND;TZID=Europe/Moscow:20261204T103000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-04-p1-Подгруппа: 1@petrocollege.ru
 DESCRIPTION:Пара №: 1\nПреподаватель: Антонов С
  ергей Ливерьевич\nКабинет: 1/335
@@ -1191,7 +1191,7 @@ BEGIN:VEVENT
 SUMMARY:Информатика (Подгруппа: 2)
 DTSTART;TZID=Europe/Moscow:20261204T090000
 DTEND;TZID=Europe/Moscow:20261204T103000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-04-p1-Подгруппа: 2@petrocollege.ru
 DESCRIPTION:Пара №: 1\nПреподаватель: Вакансия 
  Романова 4\nКабинет: 1/335*
@@ -1201,7 +1201,7 @@ BEGIN:VEVENT
 SUMMARY:История
 DTSTART;TZID=Europe/Moscow:20261204T105000
 DTEND;TZID=Europe/Moscow:20261204T122000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-04-p2-all@petrocollege.ru
 DESCRIPTION:Пара №: 2\nПреподаватель: Максимов 
  Всеволод Дмитриевич\nКабинет: 1/227
@@ -1211,7 +1211,7 @@ BEGIN:VEVENT
 SUMMARY:Русский язык
 DTSTART;TZID=Europe/Moscow:20261204T130500
 DTEND;TZID=Europe/Moscow:20261204T143500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-04-p3-all@petrocollege.ru
 DESCRIPTION:Пара №: 3\nПреподаватель: Титова Ир
  ина Евгеньевна\nКабинет: 1/201
@@ -1221,7 +1221,7 @@ BEGIN:VEVENT
 SUMMARY:География
 DTSTART;TZID=Europe/Moscow:20261204T145000
 DTEND;TZID=Europe/Moscow:20261204T162000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-04-p4-all@petrocollege.ru
 DESCRIPTION:Пара №: 4\nПреподаватель: Чемисова 
  Наталья Анатольевна\nКабинет: 1/329
@@ -1231,7 +1231,7 @@ BEGIN:VEVENT
 SUMMARY:Информатика (Подгруппа: 1)
 DTSTART;TZID=Europe/Moscow:20261205T090000
 DTEND;TZID=Europe/Moscow:20261205T103000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-05-p1-Подгруппа: 1@petrocollege.ru
 DESCRIPTION:Пара №: 1\nПреподаватель: Антонов С
  ергей Ливерьевич\nКабинет: 1/335
@@ -1241,7 +1241,7 @@ BEGIN:VEVENT
 SUMMARY:Информатика (Подгруппа: 2)
 DTSTART;TZID=Europe/Moscow:20261205T090000
 DTEND;TZID=Europe/Moscow:20261205T103000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-05-p1-Подгруппа: 2@petrocollege.ru
 DESCRIPTION:Пара №: 1\nПреподаватель: Вакансия 
  Романова 4\nКабинет: 1/335*
@@ -1251,7 +1251,7 @@ BEGIN:VEVENT
 SUMMARY:Математика
 DTSTART;TZID=Europe/Moscow:20261205T104500
 DTEND;TZID=Europe/Moscow:20261205T121500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-05-p2-all@petrocollege.ru
 DESCRIPTION:Пара №: 2\nПреподаватель: Паллонен 
  Ирина Анатольевна\nКабинет: 1/221
@@ -1261,7 +1261,7 @@ BEGIN:VEVENT
 SUMMARY:Биология
 DTSTART;TZID=Europe/Moscow:20261205T124500
 DTEND;TZID=Europe/Moscow:20261205T141500
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-05-p3-all@petrocollege.ru
 DESCRIPTION:Пара №: 3\nПреподаватель: Соплина О
  льга Николаевна\nКабинет: 1/205
@@ -1271,7 +1271,7 @@ BEGIN:VEVENT
 SUMMARY:Иностранный язык (Подгруппа: 2)
 DTSTART;TZID=Europe/Moscow:20261205T143000
 DTEND;TZID=Europe/Moscow:20261205T160000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-05-p4-Подгруппа: 2@petrocollege.ru
 DESCRIPTION:Пара №: 4\nПреподаватель: Анисимов
  а Дарья Александровна\nКабинет: 4/108
@@ -1281,7 +1281,7 @@ BEGIN:VEVENT
 SUMMARY:Иностранный язык (Подгруппа: 1)
 DTSTART;TZID=Europe/Moscow:20261205T143000
 DTEND;TZID=Europe/Moscow:20261205T160000
-DTSTAMP:20261124T202759Z
+DTSTAMP:20261125T062430Z
 UID:2026-12-05-p4-Подгруппа: 1@petrocollege.ru
 DESCRIPTION:Пара №: 4\nПреподаватель: Журавлев
  а Ирина Львовна\nКабинет: 4/110
